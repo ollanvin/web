@@ -28,6 +28,42 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Nav */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .nav a {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav a:hover { background: var(--accent-light); color: var(--accent); }
+  .nav a.active { background: var(--accent); color: #fff; }
+
   /* Header */
   .header {
     background: var(--surface);
@@ -218,6 +254,8 @@
 
   /* Responsive */
   @media (max-width: 640px) {
+    .nav { padding: 10px 12px; }
+    .nav a { font-size: 11px; padding: 4px 6px; }
     .header { padding: 24px 16px 0; }
     .header h1 { font-size: 22px; }
     .main { padding: 24px 16px 60px; }
@@ -230,6 +268,25 @@
 </style>
 </head>
 <body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">CardSpend Legal</span>
+    <a href="privacy.html" class="active"><span class="nav-ko">개인정보</span><span class="nav-en" style="display:none">Privacy</span><span class="nav-zh" style="display:none">隐私政策</span><span class="nav-ja" style="display:none">プライバシー</span></a>
+    <a href="terms.html"><span class="nav-ko">이용약관</span><span class="nav-en" style="display:none">Terms</span><span class="nav-zh" style="display:none">使用条款</span><span class="nav-ja" style="display:none">利用規約</span></a>
+    <a href="refund.html"><span class="nav-ko">환불정책</span><span class="nav-en" style="display:none">Refund</span><span class="nav-zh" style="display:none">退款</span><span class="nav-ja" style="display:none">返金</span></a>
+    <a href="account-deletion.html"><span class="nav-ko">계정삭제</span><span class="nav-en" style="display:none">Deletion</span><span class="nav-zh" style="display:none">删除账户</span><span class="nav-ja" style="display:none">アカウント削除</span></a>
+    <a href="cookies.html"><span class="nav-ko">쿠키</span><span class="nav-en" style="display:none">Cookies</span><span class="nav-zh" style="display:none">Cookie</span><span class="nav-ja" style="display:none">Cookie</span></a>
+    <a href="eula.html"><span class="nav-ko">EULA</span><span class="nav-en" style="display:none">EULA</span><span class="nav-zh" style="display:none">EULA</span><span class="nav-ja" style="display:none">EULA</span></a>
+    <a href="data-safety.html"><span class="nav-ko">데이터안전</span><span class="nav-en" style="display:none">Data Safety</span><span class="nav-zh" style="display:none">数据安全</span><span class="nav-ja" style="display:none">データ安全</span></a>
+    <a href="ai-disclosure.html"><span class="nav-ko">AI공개</span><span class="nav-en" style="display:none">AI</span><span class="nav-zh" style="display:none">AI披露</span><span class="nav-ja" style="display:none">AI開示</span></a>
+    <a href="third-party-sdks.html"><span class="nav-ko">SDK</span><span class="nav-en" style="display:none">SDK</span><span class="nav-zh" style="display:none">SDK</span><span class="nav-ja" style="display:none">SDK</span></a>
+    <a href="subscription.html"><span class="nav-ko">구독</span><span class="nav-en" style="display:none">Subscribe</span><span class="nav-zh" style="display:none">订阅</span><span class="nav-ja" style="display:none">サブスク</span></a>
+    <a href="support.html"><span class="nav-ko">지원</span><span class="nav-en" style="display:none">Support</span><span class="nav-zh" style="display:none">支持</span><span class="nav-ja" style="display:none">サポート</span></a>
+    <a href="legal.html"><span class="nav-ko">법적고지</span><span class="nav-en" style="display:none">Legal</span><span class="nav-zh" style="display:none">法律</span><span class="nav-ja" style="display:none">法的事項</span></a>
+    <a href="children.html"><span class="nav-ko">아동보호</span><span class="nav-en" style="display:none">Children</span><span class="nav-zh" style="display:none">儿童</span><span class="nav-ja" style="display:none">児童</span></a>
+  </div>
+</nav>
 
 <div class="header">
   <div class="header-inner">
@@ -674,6 +731,12 @@
     document.getElementById('page-title').textContent = titles[lang];
     document.getElementById('page-subtitle').textContent = subtitles[lang];
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+    // Update nav labels
+    ['ko','en','zh','ja'].forEach(function(l) {
+      document.querySelectorAll('.nav-' + l).forEach(function(el) {
+        el.style.display = l === lang ? '' : 'none';
+      });
+    });
   }
 </script>
 </body>

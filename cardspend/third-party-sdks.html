@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="doc-title">서드파티 SDK — CardSpend</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --green: #059669;
+    --green-light: #ecfdf5;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --orange: #d97706;
+    --orange-light: #fffbeb;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Nav */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .nav a {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav a:hover { background: var(--accent-light); color: var(--accent); }
+  .nav a.active { background: var(--accent); color: #fff; }
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner { max-width: 720px; margin: 0 auto; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+  .lang-tabs { display: flex; gap: 0; }
+  .lang-tab {
+    padding: 10px 20px; font-size: 14px; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; border-bottom: 2px solid transparent;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .lang-tab:hover { color: var(--text-primary); }
+  .lang-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  /* Main */
+  .main { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px 28px; margin-bottom: 40px;
+  }
+  .toc-title {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 12px;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li { counter-increment: toc; margin-bottom: 6px; }
+  .toc li a {
+    font-size: 15px; color: var(--text-primary); text-decoration: none;
+    display: flex; align-items: baseline; gap: 8px; transition: color 0.15s;
+  }
+  .toc li a::before { content: counter(toc) "."; font-weight: 600; color: var(--accent); min-width: 20px; }
+  .toc li a:hover { color: var(--accent); }
+  .section { margin-bottom: 36px; }
+  .section-number { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+  .section h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px; }
+  .section h3 { font-size: 16px; font-weight: 600; margin: 16px 0 8px; }
+  .section p { font-size: 15px; color: var(--text-secondary); margin-bottom: 12px; }
+  .section ul { margin: 8px 0 16px 20px; }
+  .section ul li { font-size: 15px; color: var(--text-secondary); margin-bottom: 6px; }
+  .data-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .data-tag {
+    display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  }
+  .data-tag.collect { background: var(--accent-light); color: var(--accent); }
+  .data-tag.no-collect { background: var(--red-light); color: var(--red); }
+  .data-tag.safe { background: var(--green-light); color: var(--green); }
+  .data-tag.warn { background: var(--orange-light); color: var(--orange); }
+  .highlight-box {
+    background: var(--green-light); border-left: 3px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px; margin: 12px 0; font-size: 14px; color: #065f46;
+  }
+  .highlight-box.warn { background: var(--red-light); border-left-color: var(--red); color: #991b1b; }
+  .highlight-box.info { background: var(--accent-light); border-left-color: var(--accent); color: #1e40af; }
+  .highlight-box.orange { background: var(--orange-light); border-left-color: var(--orange); color: #92400e; }
+  .divider { height: 1px; background: var(--border); margin: 36px 0; }
+  .footer {
+    text-align: center; padding: 24px; font-size: 13px; color: var(--text-secondary);
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .lang-content { display: none; }
+  .lang-content.active { display: block; }
+  .step-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin: 12px 0;
+  }
+  .step-num {
+    display: inline-block; width: 28px; height: 28px; line-height: 28px;
+    text-align: center; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 13px; font-weight: 700; margin-right: 10px;
+  }
+  .sdk-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px; margin: 10px 0;
+  }
+  .sdk-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .sdk-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+  @media (max-width: 640px) {
+    .nav { padding: 10px 12px; }
+    .nav a { font-size: 11px; padding: 4px 6px; }
+    .header { padding: 24px 16px 0; }
+    .header h1 { font-size: 22px; }
+    .main { padding: 24px 16px 60px; }
+    .lang-tab { padding: 10px 14px; font-size: 13px; }
+    .toc { padding: 20px; }
+    .section h2 { font-size: 18px; }
+    .data-tag { padding: 5px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">CardSpend Legal</span>
+    <a href="privacy.html"><span class="nav-ko">개인정보</span><span class="nav-en" style="display:none">Privacy</span><span class="nav-zh" style="display:none">隐私政策</span><span class="nav-ja" style="display:none">プライバシー</span></a><a href="terms.html"><span class="nav-ko">이용약관</span><span class="nav-en" style="display:none">Terms</span><span class="nav-zh" style="display:none">使用条款</span><span class="nav-ja" style="display:none">利用規約</span></a><a href="refund.html"><span class="nav-ko">환불정책</span><span class="nav-en" style="display:none">Refund</span><span class="nav-zh" style="display:none">退款</span><span class="nav-ja" style="display:none">返金</span></a><a href="account-deletion.html"><span class="nav-ko">계정삭제</span><span class="nav-en" style="display:none">Deletion</span><span class="nav-zh" style="display:none">删除账户</span><span class="nav-ja" style="display:none">アカウント削除</span></a><a href="cookies.html"><span class="nav-ko">쿠키</span><span class="nav-en" style="display:none">Cookies</span><span class="nav-zh" style="display:none">Cookie</span><span class="nav-ja" style="display:none">Cookie</span></a><a href="eula.html"><span class="nav-ko">EULA</span><span class="nav-en" style="display:none">EULA</span><span class="nav-zh" style="display:none">EULA</span><span class="nav-ja" style="display:none">EULA</span></a><a href="data-safety.html"><span class="nav-ko">데이터안전</span><span class="nav-en" style="display:none">Data Safety</span><span class="nav-zh" style="display:none">数据安全</span><span class="nav-ja" style="display:none">データ安全</span></a><a href="ai-disclosure.html"><span class="nav-ko">AI공개</span><span class="nav-en" style="display:none">AI</span><span class="nav-zh" style="display:none">AI披露</span><span class="nav-ja" style="display:none">AI開示</span></a><a href="third-party-sdks.html" class="active"><span class="nav-ko">SDK</span><span class="nav-en" style="display:none">SDK</span><span class="nav-zh" style="display:none">SDK</span><span class="nav-ja" style="display:none">SDK</span></a><a href="subscription.html"><span class="nav-ko">구독</span><span class="nav-en" style="display:none">Subscribe</span><span class="nav-zh" style="display:none">订阅</span><span class="nav-ja" style="display:none">サブスク</span></a><a href="support.html"><span class="nav-ko">지원</span><span class="nav-en" style="display:none">Support</span><span class="nav-zh" style="display:none">支持</span><span class="nav-ja" style="display:none">サポート</span></a><a href="legal.html"><span class="nav-ko">법적고지</span><span class="nav-en" style="display:none">Legal</span><span class="nav-zh" style="display:none">法律</span><span class="nav-ja" style="display:none">法的事項</span></a><a href="children.html"><span class="nav-ko">아동보호</span><span class="nav-en" style="display:none">Children</span><span class="nav-zh" style="display:none">儿童</span><span class="nav-ja" style="display:none">児童</span></a>
+  </div>
+</nav>
+
+<div class="header">
+  <div class="header-inner">
+    <h1 id="page-title">서드파티 SDK</h1>
+    <p class="subtitle" id="page-subtitle">시행일: 2026년 4월 3일 · CardSpend by OllanVin</p>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="switchLang('ko')">한국어</button>
+      <button class="lang-tab" onclick="switchLang('en')">English</button>
+      <button class="lang-tab" onclick="switchLang('zh')">中文</button>
+      <button class="lang-tab" onclick="switchLang('ja')">日本語</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="lang-content active" id="lang-ko">
+    <div class="toc">
+      <div class="toc-title">목차</div>
+      <ol>
+        <li><a href="#ko-1">SDK 목록</a></li>
+        <li><a href="#ko-2">데이터 처리 원칙</a></li>
+        <li><a href="#ko-3">문의</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ko-1">
+      <div class="section-number">01</div>
+      <h2>SDK 목록</h2>
+      <p>CardSpend는 다음 서드파티 SDK를 사용합니다:</p>
+      <div class="sdk-card">
+        <h4>Kakao SDK 2.19.0</h4>
+        <p><strong>용도:</strong> 카카오 소셜 로그인</p>
+        <p><strong>수집 데이터:</strong> 이메일, 프로필 (사용자 동의 시)</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google Credential Manager 1.3.0</h4>
+        <p><strong>용도:</strong> Google 소셜 로그인</p>
+        <p><strong>수집 데이터:</strong> 이메일, 이름 (사용자 동의 시)</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google Play Billing 7.x</h4>
+        <p><strong>용도:</strong> 구독 결제 처리</p>
+        <p><strong>수집 데이터:</strong> 결제 상태 (금융 정보는 Google이 직접 처리)</p>
+      </div>
+      <div class="sdk-card">
+        <h4>ZXing (Zebra Crossing)</h4>
+        <p><strong>용도:</strong> 바코드/카드 번호 스캔</p>
+        <p><strong>수집 데이터:</strong> 없음 (온디바이스 처리)</p>
+      </div>
+      <div class="sdk-card">
+        <h4>CameraX</h4>
+        <p><strong>용도:</strong> 카메라 프리뷰 및 캡처</p>
+        <p><strong>수집 데이터:</strong> 없음 (온디바이스 처리)</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google ML Kit (Text Recognition)</h4>
+        <p><strong>용도:</strong> 카드 텍스트 인식</p>
+        <p><strong>수집 데이터:</strong> 없음 (온디바이스 처리)</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-2">
+      <div class="section-number">02</div>
+      <h2>데이터 처리 원칙</h2>
+      <div class="highlight-box">모든 SDK는 서비스 제공에 필요한 최소한의 데이터만 처리합니다. 광고 또는 사용자 추적 목적의 SDK는 사용하지 않습니다.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-3">
+      <div class="section-number">03</div>
+      <h2>문의</h2>
+      <p>SDK 관련 문의: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-en">
+    <div class="toc">
+      <div class="toc-title">Table of Contents</div>
+      <ol>
+        <li><a href="#en-1">SDK List</a></li>
+        <li><a href="#en-2">Data Processing Principles</a></li>
+        <li><a href="#en-3">Contact</a></li>
+      </ol>
+    </div>
+    <div class="section" id="en-1">
+      <div class="section-number">01</div>
+      <h2>SDK List</h2>
+      <p>CardSpend uses the following third-party SDKs:</p>
+      <div class="sdk-card">
+        <h4>Kakao SDK 2.19.0</h4>
+        <p><strong>Purpose:</strong> Kakao social login</p>
+        <p><strong>Data Collected:</strong> Email, profile (with user consent)</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google Credential Manager 1.3.0</h4>
+        <p><strong>Purpose:</strong> Google social login</p>
+        <p><strong>Data Collected:</strong> Email, name (with user consent)</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google Play Billing 7.x</h4>
+        <p><strong>Purpose:</strong> Subscription payment processing</p>
+        <p><strong>Data Collected:</strong> Payment status (financial data handled by Google)</p>
+      </div>
+      <div class="sdk-card">
+        <h4>ZXing (Zebra Crossing)</h4>
+        <p><strong>Purpose:</strong> Barcode/card number scanning</p>
+        <p><strong>Data Collected:</strong> None (on-device processing)</p>
+      </div>
+      <div class="sdk-card">
+        <h4>CameraX</h4>
+        <p><strong>Purpose:</strong> Camera preview and capture</p>
+        <p><strong>Data Collected:</strong> None (on-device processing)</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google ML Kit (Text Recognition)</h4>
+        <p><strong>Purpose:</strong> Card text recognition</p>
+        <p><strong>Data Collected:</strong> None (on-device processing)</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-2">
+      <div class="section-number">02</div>
+      <h2>Data Processing Principles</h2>
+      <div class="highlight-box">All SDKs process only the minimum data necessary for service delivery. No SDKs are used for advertising or user tracking purposes.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-3">
+      <div class="section-number">03</div>
+      <h2>Contact</h2>
+      <p>SDK inquiries: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-zh">
+    <div class="toc">
+      <div class="toc-title">目录</div>
+      <ol>
+        <li><a href="#zh-1">SDK列表</a></li>
+        <li><a href="#zh-2">数据处理原则</a></li>
+        <li><a href="#zh-3">联系方式</a></li>
+      </ol>
+    </div>
+    <div class="section" id="zh-1">
+      <div class="section-number">01</div>
+      <h2>SDK列表</h2>
+      <p>CardSpend使用以下第三方SDK：</p>
+      <div class="sdk-card">
+        <h4>Kakao SDK 2.19.0</h4>
+        <p><strong>用途:</strong> Kakao社交登录</p>
+        <p><strong>收集的数据:</strong> 邮箱、个人资料（经用户同意）</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google Credential Manager 1.3.0</h4>
+        <p><strong>用途:</strong> Google社交登录</p>
+        <p><strong>收集的数据:</strong> 邮箱、姓名（经用户同意）</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google Play Billing 7.x</h4>
+        <p><strong>用途:</strong> 订阅支付处理</p>
+        <p><strong>收集的数据:</strong> 支付状态（金融数据由Google直接处理）</p>
+      </div>
+      <div class="sdk-card">
+        <h4>ZXing (Zebra Crossing)</h4>
+        <p><strong>用途:</strong> 条形码/卡号扫描</p>
+        <p><strong>收集的数据:</strong> 无（设备端处理）</p>
+      </div>
+      <div class="sdk-card">
+        <h4>CameraX</h4>
+        <p><strong>用途:</strong> 相机预览和拍摄</p>
+        <p><strong>收集的数据:</strong> 无（设备端处理）</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google ML Kit (Text Recognition)</h4>
+        <p><strong>用途:</strong> 卡片文字识别</p>
+        <p><strong>收集的数据:</strong> 无（设备端处理）</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-2">
+      <div class="section-number">02</div>
+      <h2>数据处理原则</h2>
+      <div class="highlight-box">所有SDK仅处理服务提供所需的最少数据。不使用广告或用户跟踪目的的SDK。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-3">
+      <div class="section-number">03</div>
+      <h2>联系方式</h2>
+      <p>SDK相关咨询：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-ja">
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+        <li><a href="#ja-1">SDKリスト</a></li>
+        <li><a href="#ja-2">データ処理原則</a></li>
+        <li><a href="#ja-3">お問い合わせ</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ja-1">
+      <div class="section-number">01</div>
+      <h2>SDKリスト</h2>
+      <p>CardSpendは以下のサードパーティSDKを使用しています：</p>
+      <div class="sdk-card">
+        <h4>Kakao SDK 2.19.0</h4>
+        <p><strong>用途:</strong> Kakaoソーシャルログイン</p>
+        <p><strong>収集データ:</strong> メール、プロフィール（ユーザー同意時）</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google Credential Manager 1.3.0</h4>
+        <p><strong>用途:</strong> Googleソーシャルログイン</p>
+        <p><strong>収集データ:</strong> メール、名前（ユーザー同意時）</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google Play Billing 7.x</h4>
+        <p><strong>用途:</strong> サブスクリプション決済処理</p>
+        <p><strong>収集データ:</strong> 決済状況（金融データはGoogleが直接処理）</p>
+      </div>
+      <div class="sdk-card">
+        <h4>ZXing (Zebra Crossing)</h4>
+        <p><strong>用途:</strong> バーコード/カード番号スキャン</p>
+        <p><strong>収集データ:</strong> なし（オンデバイス処理）</p>
+      </div>
+      <div class="sdk-card">
+        <h4>CameraX</h4>
+        <p><strong>用途:</strong> カメラプレビューおよびキャプチャ</p>
+        <p><strong>収集データ:</strong> なし（オンデバイス処理）</p>
+      </div>
+      <div class="sdk-card">
+        <h4>Google ML Kit (Text Recognition)</h4>
+        <p><strong>用途:</strong> カードテキスト認識</p>
+        <p><strong>収集データ:</strong> なし（オンデバイス処理）</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-2">
+      <div class="section-number">02</div>
+      <h2>データ処理原則</h2>
+      <div class="highlight-box">すべてのSDKはサービス提供に必要な最小限のデータのみを処理します。広告またはユーザートラッキング目的のSDKは使用していません。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-3">
+      <div class="section-number">03</div>
+      <h2>お問い合わせ</h2>
+      <p>SDKに関するお問い合わせ：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2026 OllanVin &middot; CardSpend &middot; <a href="mailto:founder@idolab.ai">founder@idolab.ai</a>
+</div>
+
+<script>
+  var titles = { ko: '서드파티 SDK', en: 'Third-Party SDKs', zh: '第三方SDK', ja: 'サードパーティSDK' };
+  var subtitles = { ko: '시행일: 2026년 4월 3일 · CardSpend by OllanVin', en: 'Effective: April 3, 2026 · CardSpend by OllanVin', zh: '生效日期：2026年4月3日 · CardSpend by OllanVin', ja: '施行日：2026年4月3日 · CardSpend by OllanVin' };
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-content').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.lang-tab').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('lang-' + lang).classList.add('active');
+    document.querySelector('[onclick="switchLang(\'' + lang + '\')"]').classList.add('active');
+    document.getElementById('page-title').textContent = titles[lang];
+    document.getElementById('page-subtitle').textContent = subtitles[lang];
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+    // Update nav labels
+    ['ko','en','zh','ja'].forEach(function(l) {
+      document.querySelectorAll('.nav-' + l).forEach(function(el) {
+        el.style.display = l === lang ? '' : 'none';
+      });
+    });
+  }
+</script>
+</body>
+</html>

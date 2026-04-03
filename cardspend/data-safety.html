@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="doc-title">데이터 안전 — CardSpend</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --green: #059669;
+    --green-light: #ecfdf5;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --orange: #d97706;
+    --orange-light: #fffbeb;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Nav */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .nav a {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav a:hover { background: var(--accent-light); color: var(--accent); }
+  .nav a.active { background: var(--accent); color: #fff; }
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner { max-width: 720px; margin: 0 auto; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+  .lang-tabs { display: flex; gap: 0; }
+  .lang-tab {
+    padding: 10px 20px; font-size: 14px; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; border-bottom: 2px solid transparent;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .lang-tab:hover { color: var(--text-primary); }
+  .lang-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  /* Main */
+  .main { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px 28px; margin-bottom: 40px;
+  }
+  .toc-title {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 12px;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li { counter-increment: toc; margin-bottom: 6px; }
+  .toc li a {
+    font-size: 15px; color: var(--text-primary); text-decoration: none;
+    display: flex; align-items: baseline; gap: 8px; transition: color 0.15s;
+  }
+  .toc li a::before { content: counter(toc) "."; font-weight: 600; color: var(--accent); min-width: 20px; }
+  .toc li a:hover { color: var(--accent); }
+  .section { margin-bottom: 36px; }
+  .section-number { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+  .section h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px; }
+  .section h3 { font-size: 16px; font-weight: 600; margin: 16px 0 8px; }
+  .section p { font-size: 15px; color: var(--text-secondary); margin-bottom: 12px; }
+  .section ul { margin: 8px 0 16px 20px; }
+  .section ul li { font-size: 15px; color: var(--text-secondary); margin-bottom: 6px; }
+  .data-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .data-tag {
+    display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  }
+  .data-tag.collect { background: var(--accent-light); color: var(--accent); }
+  .data-tag.no-collect { background: var(--red-light); color: var(--red); }
+  .data-tag.safe { background: var(--green-light); color: var(--green); }
+  .data-tag.warn { background: var(--orange-light); color: var(--orange); }
+  .highlight-box {
+    background: var(--green-light); border-left: 3px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px; margin: 12px 0; font-size: 14px; color: #065f46;
+  }
+  .highlight-box.warn { background: var(--red-light); border-left-color: var(--red); color: #991b1b; }
+  .highlight-box.info { background: var(--accent-light); border-left-color: var(--accent); color: #1e40af; }
+  .highlight-box.orange { background: var(--orange-light); border-left-color: var(--orange); color: #92400e; }
+  .divider { height: 1px; background: var(--border); margin: 36px 0; }
+  .footer {
+    text-align: center; padding: 24px; font-size: 13px; color: var(--text-secondary);
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .lang-content { display: none; }
+  .lang-content.active { display: block; }
+  .step-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin: 12px 0;
+  }
+  .step-num {
+    display: inline-block; width: 28px; height: 28px; line-height: 28px;
+    text-align: center; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 13px; font-weight: 700; margin-right: 10px;
+  }
+  .sdk-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px; margin: 10px 0;
+  }
+  .sdk-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .sdk-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+  @media (max-width: 640px) {
+    .nav { padding: 10px 12px; }
+    .nav a { font-size: 11px; padding: 4px 6px; }
+    .header { padding: 24px 16px 0; }
+    .header h1 { font-size: 22px; }
+    .main { padding: 24px 16px 60px; }
+    .lang-tab { padding: 10px 14px; font-size: 13px; }
+    .toc { padding: 20px; }
+    .section h2 { font-size: 18px; }
+    .data-tag { padding: 5px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">CardSpend Legal</span>
+    <a href="privacy.html"><span class="nav-ko">개인정보</span><span class="nav-en" style="display:none">Privacy</span><span class="nav-zh" style="display:none">隐私政策</span><span class="nav-ja" style="display:none">プライバシー</span></a><a href="terms.html"><span class="nav-ko">이용약관</span><span class="nav-en" style="display:none">Terms</span><span class="nav-zh" style="display:none">使用条款</span><span class="nav-ja" style="display:none">利用規約</span></a><a href="refund.html"><span class="nav-ko">환불정책</span><span class="nav-en" style="display:none">Refund</span><span class="nav-zh" style="display:none">退款</span><span class="nav-ja" style="display:none">返金</span></a><a href="account-deletion.html"><span class="nav-ko">계정삭제</span><span class="nav-en" style="display:none">Deletion</span><span class="nav-zh" style="display:none">删除账户</span><span class="nav-ja" style="display:none">アカウント削除</span></a><a href="cookies.html"><span class="nav-ko">쿠키</span><span class="nav-en" style="display:none">Cookies</span><span class="nav-zh" style="display:none">Cookie</span><span class="nav-ja" style="display:none">Cookie</span></a><a href="eula.html"><span class="nav-ko">EULA</span><span class="nav-en" style="display:none">EULA</span><span class="nav-zh" style="display:none">EULA</span><span class="nav-ja" style="display:none">EULA</span></a><a href="data-safety.html" class="active"><span class="nav-ko">데이터안전</span><span class="nav-en" style="display:none">Data Safety</span><span class="nav-zh" style="display:none">数据安全</span><span class="nav-ja" style="display:none">データ安全</span></a><a href="ai-disclosure.html"><span class="nav-ko">AI공개</span><span class="nav-en" style="display:none">AI</span><span class="nav-zh" style="display:none">AI披露</span><span class="nav-ja" style="display:none">AI開示</span></a><a href="third-party-sdks.html"><span class="nav-ko">SDK</span><span class="nav-en" style="display:none">SDK</span><span class="nav-zh" style="display:none">SDK</span><span class="nav-ja" style="display:none">SDK</span></a><a href="subscription.html"><span class="nav-ko">구독</span><span class="nav-en" style="display:none">Subscribe</span><span class="nav-zh" style="display:none">订阅</span><span class="nav-ja" style="display:none">サブスク</span></a><a href="support.html"><span class="nav-ko">지원</span><span class="nav-en" style="display:none">Support</span><span class="nav-zh" style="display:none">支持</span><span class="nav-ja" style="display:none">サポート</span></a><a href="legal.html"><span class="nav-ko">법적고지</span><span class="nav-en" style="display:none">Legal</span><span class="nav-zh" style="display:none">法律</span><span class="nav-ja" style="display:none">法的事項</span></a><a href="children.html"><span class="nav-ko">아동보호</span><span class="nav-en" style="display:none">Children</span><span class="nav-zh" style="display:none">儿童</span><span class="nav-ja" style="display:none">児童</span></a>
+  </div>
+</nav>
+
+<div class="header">
+  <div class="header-inner">
+    <h1 id="page-title">데이터 안전</h1>
+    <p class="subtitle" id="page-subtitle">시행일: 2026년 4월 3일 · CardSpend by OllanVin</p>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="switchLang('ko')">한국어</button>
+      <button class="lang-tab" onclick="switchLang('en')">English</button>
+      <button class="lang-tab" onclick="switchLang('zh')">中文</button>
+      <button class="lang-tab" onclick="switchLang('ja')">日本語</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="lang-content active" id="lang-ko">
+    <div class="toc">
+      <div class="toc-title">목차</div>
+      <ol>
+        <li><a href="#ko-1">수집하는 데이터</a></li>
+        <li><a href="#ko-2">공유하지 않는 데이터</a></li>
+        <li><a href="#ko-3">데이터 보안</a></li>
+        <li><a href="#ko-4">데이터 삭제</a></li>
+        <li><a href="#ko-5">문의</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ko-1">
+      <div class="section-number">01</div>
+      <h2>수집하는 데이터</h2>
+      <p>Google Play Data Safety 기준으로 CardSpend가 수집하는 데이터:</p>
+      <div class="data-list">
+        <span class="data-tag collect">이메일 주소 (소셜 로그인)</span>
+        <span class="data-tag collect">카드 별명 (사용자 입력)</span>
+        <span class="data-tag collect">카드사 / 끝 4자리</span>
+        <span class="data-tag collect">거래 금액 / 시각 / 가맹점</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-2">
+      <div class="section-number">02</div>
+      <h2>공유하지 않는 데이터</h2>
+      <div class="highlight-box">CardSpend는 수집한 데이터를 제3자와 공유하지 않습니다.</div>
+      <p>광고 네트워크, 분석 서비스, 데이터 브로커 등 외부 업체에 데이터를 판매하거나 공유하지 않습니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-3">
+      <div class="section-number">03</div>
+      <h2>데이터 보안</h2>
+      <div class="data-list">
+        <span class="data-tag safe">전송 중 암호화 (TLS)</span>
+        <span class="data-tag safe">저장 시 암호화 (AES-256)</span>
+        <span class="data-tag safe">온디바이스 분석</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-4">
+      <div class="section-number">04</div>
+      <h2>데이터 삭제</h2>
+      <p>사용자는 앱 내 설정에서 언제든지 계정 및 모든 데이터를 삭제할 수 있습니다.</p>
+      <p>삭제 요청 시 서버의 모든 데이터가 즉시 영구 삭제됩니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-5">
+      <div class="section-number">05</div>
+      <h2>문의</h2>
+      <p>데이터 안전 관련 문의: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-en">
+    <div class="toc">
+      <div class="toc-title">Table of Contents</div>
+      <ol>
+        <li><a href="#en-1">Data We Collect</a></li>
+        <li><a href="#en-2">Data We Do Not Share</a></li>
+        <li><a href="#en-3">Data Security</a></li>
+        <li><a href="#en-4">Data Deletion</a></li>
+        <li><a href="#en-5">Contact</a></li>
+      </ol>
+    </div>
+    <div class="section" id="en-1">
+      <div class="section-number">01</div>
+      <h2>Data We Collect</h2>
+      <p>Data collected by CardSpend per Google Play Data Safety standards:</p>
+      <div class="data-list">
+        <span class="data-tag collect">Email address (social login)</span>
+        <span class="data-tag collect">Card nickname (user input)</span>
+        <span class="data-tag collect">Card issuer / last 4 digits</span>
+        <span class="data-tag collect">Transaction amount / time / merchant</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-2">
+      <div class="section-number">02</div>
+      <h2>Data We Do Not Share</h2>
+      <div class="highlight-box">CardSpend does not share collected data with third parties.</div>
+      <p>We do not sell or share data with ad networks, analytics services, or data brokers.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-3">
+      <div class="section-number">03</div>
+      <h2>Data Security</h2>
+      <div class="data-list">
+        <span class="data-tag safe">Encryption in transit (TLS)</span>
+        <span class="data-tag safe">Encryption at rest (AES-256)</span>
+        <span class="data-tag safe">On-device analysis</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-4">
+      <div class="section-number">04</div>
+      <h2>Data Deletion</h2>
+      <p>Users can delete their account and all data at any time from the app settings.</p>
+      <p>All server data is permanently deleted immediately upon request.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-5">
+      <div class="section-number">05</div>
+      <h2>Contact</h2>
+      <p>Data safety inquiries: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-zh">
+    <div class="toc">
+      <div class="toc-title">目录</div>
+      <ol>
+        <li><a href="#zh-1">我们收集的数据</a></li>
+        <li><a href="#zh-2">我们不共享的数据</a></li>
+        <li><a href="#zh-3">数据安全</a></li>
+        <li><a href="#zh-4">数据删除</a></li>
+        <li><a href="#zh-5">联系方式</a></li>
+      </ol>
+    </div>
+    <div class="section" id="zh-1">
+      <div class="section-number">01</div>
+      <h2>我们收集的数据</h2>
+      <p>根据Google Play数据安全标准，CardSpend收集的数据：</p>
+      <div class="data-list">
+        <span class="data-tag collect">邮箱地址（社交登录）</span>
+        <span class="data-tag collect">卡片昵称（用户输入）</span>
+        <span class="data-tag collect">发卡机构/末4位</span>
+        <span class="data-tag collect">交易金额/时间/商户</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-2">
+      <div class="section-number">02</div>
+      <h2>我们不共享的数据</h2>
+      <div class="highlight-box">CardSpend不与第三方共享收集的数据。</div>
+      <p>我们不向广告网络、分析服务或数据经纪商出售或共享数据。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-3">
+      <div class="section-number">03</div>
+      <h2>数据安全</h2>
+      <div class="data-list">
+        <span class="data-tag safe">传输加密（TLS）</span>
+        <span class="data-tag safe">存储加密（AES-256）</span>
+        <span class="data-tag safe">设备端分析</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-4">
+      <div class="section-number">04</div>
+      <h2>数据删除</h2>
+      <p>用户可以随时在应用设置中删除账户和所有数据。</p>
+      <p>收到请求后服务器上的所有数据将立即永久删除。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-5">
+      <div class="section-number">05</div>
+      <h2>联系方式</h2>
+      <p>数据安全咨询：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-ja">
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+        <li><a href="#ja-1">収集するデータ</a></li>
+        <li><a href="#ja-2">共有しないデータ</a></li>
+        <li><a href="#ja-3">データセキュリティ</a></li>
+        <li><a href="#ja-4">データ削除</a></li>
+        <li><a href="#ja-5">お問い合わせ</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ja-1">
+      <div class="section-number">01</div>
+      <h2>収集するデータ</h2>
+      <p>Google Playデータセーフティ基準に基づきCardSpendが収集するデータ：</p>
+      <div class="data-list">
+        <span class="data-tag collect">メールアドレス（ソーシャルログイン）</span>
+        <span class="data-tag collect">カードニックネーム（ユーザー入力）</span>
+        <span class="data-tag collect">カード会社/下4桁</span>
+        <span class="data-tag collect">取引金額/時刻/加盟店</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-2">
+      <div class="section-number">02</div>
+      <h2>共有しないデータ</h2>
+      <div class="highlight-box">CardSpendは収集したデータを第三者と共有しません。</div>
+      <p>広告ネットワーク、分析サービス、データブローカーにデータを販売・共有しません。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-3">
+      <div class="section-number">03</div>
+      <h2>データセキュリティ</h2>
+      <div class="data-list">
+        <span class="data-tag safe">転送中の暗号化（TLS）</span>
+        <span class="data-tag safe">保存時の暗号化（AES-256）</span>
+        <span class="data-tag safe">オンデバイス分析</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-4">
+      <div class="section-number">04</div>
+      <h2>データ削除</h2>
+      <p>ユーザーはアプリの設定からいつでもアカウントとすべてのデータを削除できます。</p>
+      <p>リクエスト時にサーバーのすべてのデータが即座に永久削除されます。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-5">
+      <div class="section-number">05</div>
+      <h2>お問い合わせ</h2>
+      <p>データ安全に関するお問い合わせ：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2026 OllanVin &middot; CardSpend &middot; <a href="mailto:founder@idolab.ai">founder@idolab.ai</a>
+</div>
+
+<script>
+  var titles = { ko: '데이터 안전', en: 'Data Safety', zh: '数据安全', ja: 'データ安全' };
+  var subtitles = { ko: '시행일: 2026년 4월 3일 · CardSpend by OllanVin', en: 'Effective: April 3, 2026 · CardSpend by OllanVin', zh: '生效日期：2026年4月3日 · CardSpend by OllanVin', ja: '施行日：2026年4月3日 · CardSpend by OllanVin' };
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-content').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.lang-tab').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('lang-' + lang).classList.add('active');
+    document.querySelector('[onclick="switchLang(\'' + lang + '\')"]').classList.add('active');
+    document.getElementById('page-title').textContent = titles[lang];
+    document.getElementById('page-subtitle').textContent = subtitles[lang];
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+    // Update nav labels
+    ['ko','en','zh','ja'].forEach(function(l) {
+      document.querySelectorAll('.nav-' + l).forEach(function(el) {
+        el.style.display = l === lang ? '' : 'none';
+      });
+    });
+  }
+</script>
+</body>
+</html>

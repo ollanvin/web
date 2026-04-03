@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="doc-title">계정 삭제 — CardSpend</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --green: #059669;
+    --green-light: #ecfdf5;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --orange: #d97706;
+    --orange-light: #fffbeb;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Nav */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .nav a {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav a:hover { background: var(--accent-light); color: var(--accent); }
+  .nav a.active { background: var(--accent); color: #fff; }
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner { max-width: 720px; margin: 0 auto; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+  .lang-tabs { display: flex; gap: 0; }
+  .lang-tab {
+    padding: 10px 20px; font-size: 14px; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; border-bottom: 2px solid transparent;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .lang-tab:hover { color: var(--text-primary); }
+  .lang-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  /* Main */
+  .main { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px 28px; margin-bottom: 40px;
+  }
+  .toc-title {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 12px;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li { counter-increment: toc; margin-bottom: 6px; }
+  .toc li a {
+    font-size: 15px; color: var(--text-primary); text-decoration: none;
+    display: flex; align-items: baseline; gap: 8px; transition: color 0.15s;
+  }
+  .toc li a::before { content: counter(toc) "."; font-weight: 600; color: var(--accent); min-width: 20px; }
+  .toc li a:hover { color: var(--accent); }
+  .section { margin-bottom: 36px; }
+  .section-number { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+  .section h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px; }
+  .section h3 { font-size: 16px; font-weight: 600; margin: 16px 0 8px; }
+  .section p { font-size: 15px; color: var(--text-secondary); margin-bottom: 12px; }
+  .section ul { margin: 8px 0 16px 20px; }
+  .section ul li { font-size: 15px; color: var(--text-secondary); margin-bottom: 6px; }
+  .data-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .data-tag {
+    display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  }
+  .data-tag.collect { background: var(--accent-light); color: var(--accent); }
+  .data-tag.no-collect { background: var(--red-light); color: var(--red); }
+  .data-tag.safe { background: var(--green-light); color: var(--green); }
+  .data-tag.warn { background: var(--orange-light); color: var(--orange); }
+  .highlight-box {
+    background: var(--green-light); border-left: 3px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px; margin: 12px 0; font-size: 14px; color: #065f46;
+  }
+  .highlight-box.warn { background: var(--red-light); border-left-color: var(--red); color: #991b1b; }
+  .highlight-box.info { background: var(--accent-light); border-left-color: var(--accent); color: #1e40af; }
+  .highlight-box.orange { background: var(--orange-light); border-left-color: var(--orange); color: #92400e; }
+  .divider { height: 1px; background: var(--border); margin: 36px 0; }
+  .footer {
+    text-align: center; padding: 24px; font-size: 13px; color: var(--text-secondary);
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .lang-content { display: none; }
+  .lang-content.active { display: block; }
+  .step-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin: 12px 0;
+  }
+  .step-num {
+    display: inline-block; width: 28px; height: 28px; line-height: 28px;
+    text-align: center; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 13px; font-weight: 700; margin-right: 10px;
+  }
+  .sdk-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px; margin: 10px 0;
+  }
+  .sdk-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .sdk-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+  @media (max-width: 640px) {
+    .nav { padding: 10px 12px; }
+    .nav a { font-size: 11px; padding: 4px 6px; }
+    .header { padding: 24px 16px 0; }
+    .header h1 { font-size: 22px; }
+    .main { padding: 24px 16px 60px; }
+    .lang-tab { padding: 10px 14px; font-size: 13px; }
+    .toc { padding: 20px; }
+    .section h2 { font-size: 18px; }
+    .data-tag { padding: 5px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">CardSpend Legal</span>
+    <a href="privacy.html"><span class="nav-ko">개인정보</span><span class="nav-en" style="display:none">Privacy</span><span class="nav-zh" style="display:none">隐私政策</span><span class="nav-ja" style="display:none">プライバシー</span></a><a href="terms.html"><span class="nav-ko">이용약관</span><span class="nav-en" style="display:none">Terms</span><span class="nav-zh" style="display:none">使用条款</span><span class="nav-ja" style="display:none">利用規約</span></a><a href="refund.html"><span class="nav-ko">환불정책</span><span class="nav-en" style="display:none">Refund</span><span class="nav-zh" style="display:none">退款</span><span class="nav-ja" style="display:none">返金</span></a><a href="account-deletion.html" class="active"><span class="nav-ko">계정삭제</span><span class="nav-en" style="display:none">Deletion</span><span class="nav-zh" style="display:none">删除账户</span><span class="nav-ja" style="display:none">アカウント削除</span></a><a href="cookies.html"><span class="nav-ko">쿠키</span><span class="nav-en" style="display:none">Cookies</span><span class="nav-zh" style="display:none">Cookie</span><span class="nav-ja" style="display:none">Cookie</span></a><a href="eula.html"><span class="nav-ko">EULA</span><span class="nav-en" style="display:none">EULA</span><span class="nav-zh" style="display:none">EULA</span><span class="nav-ja" style="display:none">EULA</span></a><a href="data-safety.html"><span class="nav-ko">데이터안전</span><span class="nav-en" style="display:none">Data Safety</span><span class="nav-zh" style="display:none">数据安全</span><span class="nav-ja" style="display:none">データ安全</span></a><a href="ai-disclosure.html"><span class="nav-ko">AI공개</span><span class="nav-en" style="display:none">AI</span><span class="nav-zh" style="display:none">AI披露</span><span class="nav-ja" style="display:none">AI開示</span></a><a href="third-party-sdks.html"><span class="nav-ko">SDK</span><span class="nav-en" style="display:none">SDK</span><span class="nav-zh" style="display:none">SDK</span><span class="nav-ja" style="display:none">SDK</span></a><a href="subscription.html"><span class="nav-ko">구독</span><span class="nav-en" style="display:none">Subscribe</span><span class="nav-zh" style="display:none">订阅</span><span class="nav-ja" style="display:none">サブスク</span></a><a href="support.html"><span class="nav-ko">지원</span><span class="nav-en" style="display:none">Support</span><span class="nav-zh" style="display:none">支持</span><span class="nav-ja" style="display:none">サポート</span></a><a href="legal.html"><span class="nav-ko">법적고지</span><span class="nav-en" style="display:none">Legal</span><span class="nav-zh" style="display:none">法律</span><span class="nav-ja" style="display:none">法的事項</span></a><a href="children.html"><span class="nav-ko">아동보호</span><span class="nav-en" style="display:none">Children</span><span class="nav-zh" style="display:none">儿童</span><span class="nav-ja" style="display:none">児童</span></a>
+  </div>
+</nav>
+
+<div class="header">
+  <div class="header-inner">
+    <h1 id="page-title">계정 삭제</h1>
+    <p class="subtitle" id="page-subtitle">시행일: 2026년 4월 3일 · CardSpend by OllanVin</p>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="switchLang('ko')">한국어</button>
+      <button class="lang-tab" onclick="switchLang('en')">English</button>
+      <button class="lang-tab" onclick="switchLang('zh')">中文</button>
+      <button class="lang-tab" onclick="switchLang('ja')">日本語</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="lang-content active" id="lang-ko">
+    <div class="toc">
+      <div class="toc-title">목차</div>
+      <ol>
+        <li><a href="#ko-1">삭제 방법</a></li>
+        <li><a href="#ko-2">삭제 시 처리되는 데이터</a></li>
+        <li><a href="#ko-3">삭제 후 복구</a></li>
+        <li><a href="#ko-4">구독 취소</a></li>
+        <li><a href="#ko-5">문의</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ko-1">
+      <div class="section-number">01</div>
+      <h2>삭제 방법</h2>
+      <p>CardSpend 앱 내에서 계정을 삭제할 수 있습니다:</p>
+      <div class="step-box">
+        <p><span class="step-num">1</span>CardSpend 앱 실행</p>
+        <p><span class="step-num">2</span>하단 탭에서 <strong>설정</strong> 선택</p>
+        <p><span class="step-num">3</span><strong>멤버십 탈퇴</strong> 선택</p>
+        <p><span class="step-num">4</span>확인 버튼을 눌러 삭제 완료</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-2">
+      <div class="section-number">02</div>
+      <h2>삭제 시 처리되는 데이터</h2>
+      <p>계정 삭제 시 다음 데이터가 즉시 영구 삭제됩니다:</p>
+      <div class="data-list">
+        <span class="data-tag no-collect">계정 정보 (이메일)</span>
+        <span class="data-tag no-collect">카드 정보 (별명, 카드사, 끝 4자리)</span>
+        <span class="data-tag no-collect">거래 기록</span>
+        <span class="data-tag no-collect">백업 데이터</span>
+        <span class="data-tag no-collect">설정값</span>
+      </div>
+      <div class="highlight-box warn">삭제된 데이터는 복구할 수 없습니다. 삭제 전 필요한 데이터를 백업하십시오.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-3">
+      <div class="section-number">03</div>
+      <h2>삭제 후 복구</h2>
+      <p>계정 삭제는 즉시 처리되며, 삭제 후 데이터 복구는 기술적으로 불가능합니다.</p>
+      <p>서비스를 다시 이용하려면 새 계정을 생성해야 합니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-4">
+      <div class="section-number">04</div>
+      <h2>구독 취소</h2>
+      <div class="highlight-box orange">계정 삭제 전 활성 구독을 반드시 취소하십시오. 계정 삭제만으로 구독이 자동 취소되지 않을 수 있습니다.</div>
+      <p>Google Play: Google Play 앱 → 구독 → CardSpend → 구독 취소</p>
+      <p>Apple: 설정 → Apple ID → 구독 → CardSpend → 구독 취소</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-5">
+      <div class="section-number">05</div>
+      <h2>문의</h2>
+      <p>계정 삭제 관련 문의: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-en">
+    <div class="toc">
+      <div class="toc-title">Table of Contents</div>
+      <ol>
+        <li><a href="#en-1">How to Delete</a></li>
+        <li><a href="#en-2">Data Processed on Deletion</a></li>
+        <li><a href="#en-3">Recovery After Deletion</a></li>
+        <li><a href="#en-4">Cancel Subscription</a></li>
+        <li><a href="#en-5">Contact</a></li>
+      </ol>
+    </div>
+    <div class="section" id="en-1">
+      <div class="section-number">01</div>
+      <h2>How to Delete Your Account</h2>
+      <p>You can delete your account within the CardSpend app:</p>
+      <div class="step-box">
+        <p><span class="step-num">1</span>Open the CardSpend app</p>
+        <p><span class="step-num">2</span>Go to <strong>Settings</strong> from the bottom tab</p>
+        <p><span class="step-num">3</span>Select <strong>Delete Membership</strong></p>
+        <p><span class="step-num">4</span>Confirm to complete deletion</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-2">
+      <div class="section-number">02</div>
+      <h2>Data Processed on Deletion</h2>
+      <p>The following data is permanently deleted immediately upon account deletion:</p>
+      <div class="data-list">
+        <span class="data-tag no-collect">Account info (email)</span>
+        <span class="data-tag no-collect">Card info (nickname, issuer, last 4 digits)</span>
+        <span class="data-tag no-collect">Transaction records</span>
+        <span class="data-tag no-collect">Backup data</span>
+        <span class="data-tag no-collect">Settings</span>
+      </div>
+      <div class="highlight-box warn">Deleted data cannot be recovered. Please back up any needed data before deletion.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-3">
+      <div class="section-number">03</div>
+      <h2>Recovery After Deletion</h2>
+      <p>Account deletion is processed immediately. Data recovery is technically impossible after deletion.</p>
+      <p>To use the service again, you must create a new account.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-4">
+      <div class="section-number">04</div>
+      <h2>Cancel Your Subscription</h2>
+      <div class="highlight-box orange">Please cancel any active subscriptions before deleting your account. Account deletion alone may not automatically cancel subscriptions.</div>
+      <p>Google Play: Google Play app → Subscriptions → CardSpend → Cancel</p>
+      <p>Apple: Settings → Apple ID → Subscriptions → CardSpend → Cancel</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-5">
+      <div class="section-number">05</div>
+      <h2>Contact</h2>
+      <p>Account deletion inquiries: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-zh">
+    <div class="toc">
+      <div class="toc-title">目录</div>
+      <ol>
+        <li><a href="#zh-1">删除方法</a></li>
+        <li><a href="#zh-2">删除时处理的数据</a></li>
+        <li><a href="#zh-3">删除后恢复</a></li>
+        <li><a href="#zh-4">取消订阅</a></li>
+        <li><a href="#zh-5">联系方式</a></li>
+      </ol>
+    </div>
+    <div class="section" id="zh-1">
+      <div class="section-number">01</div>
+      <h2>删除方法</h2>
+      <p>您可以在CardSpend应用中删除账户：</p>
+      <div class="step-box">
+        <p><span class="step-num">1</span>打开CardSpend应用</p>
+        <p><span class="step-num">2</span>在底部标签中选择<strong>设置</strong></p>
+        <p><span class="step-num">3</span>选择<strong>注销会员</strong></p>
+        <p><span class="step-num">4</span>确认完成删除</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-2">
+      <div class="section-number">02</div>
+      <h2>删除时处理的数据</h2>
+      <p>账户删除时以下数据将立即永久删除：</p>
+      <div class="data-list">
+        <span class="data-tag no-collect">账户信息（邮箱）</span>
+        <span class="data-tag no-collect">卡片信息（昵称、发卡机构、末4位）</span>
+        <span class="data-tag no-collect">交易记录</span>
+        <span class="data-tag no-collect">备份数据</span>
+        <span class="data-tag no-collect">设置信息</span>
+      </div>
+      <div class="highlight-box warn">已删除的数据无法恢复。请在删除前备份所需数据。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-3">
+      <div class="section-number">03</div>
+      <h2>删除后恢复</h2>
+      <p>账户删除即时处理，删除后数据在技术上无法恢复。</p>
+      <p>如需再次使用服务，须创建新账户。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-4">
+      <div class="section-number">04</div>
+      <h2>取消订阅</h2>
+      <div class="highlight-box orange">删除账户前请务必取消活跃订阅。仅删除账户可能不会自动取消订阅。</div>
+      <p>Google Play：Google Play应用 → 订阅 → CardSpend → 取消订阅</p>
+      <p>Apple：设置 → Apple ID → 订阅 → CardSpend → 取消订阅</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-5">
+      <div class="section-number">05</div>
+      <h2>联系方式</h2>
+      <p>账户删除咨询：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-ja">
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+        <li><a href="#ja-1">削除方法</a></li>
+        <li><a href="#ja-2">削除時に処理されるデータ</a></li>
+        <li><a href="#ja-3">削除後の復旧</a></li>
+        <li><a href="#ja-4">サブスクリプションの取消</a></li>
+        <li><a href="#ja-5">お問い合わせ</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ja-1">
+      <div class="section-number">01</div>
+      <h2>削除方法</h2>
+      <p>CardSpendアプリ内でアカウントを削除できます：</p>
+      <div class="step-box">
+        <p><span class="step-num">1</span>CardSpendアプリを開く</p>
+        <p><span class="step-num">2</span>下部タブから<strong>設定</strong>を選択</p>
+        <p><span class="step-num">3</span><strong>メンバーシップ退会</strong>を選択</p>
+        <p><span class="step-num">4</span>確認ボタンを押して削除完了</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-2">
+      <div class="section-number">02</div>
+      <h2>削除時に処理されるデータ</h2>
+      <p>アカウント削除時、以下のデータが即座に永久削除されます：</p>
+      <div class="data-list">
+        <span class="data-tag no-collect">アカウント情報（メール）</span>
+        <span class="data-tag no-collect">カード情報（ニックネーム、カード会社、下4桁）</span>
+        <span class="data-tag no-collect">取引記録</span>
+        <span class="data-tag no-collect">バックアップデータ</span>
+        <span class="data-tag no-collect">設定値</span>
+      </div>
+      <div class="highlight-box warn">削除されたデータは復旧できません。削除前に必要なデータをバックアップしてください。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-3">
+      <div class="section-number">03</div>
+      <h2>削除後の復旧</h2>
+      <p>アカウント削除は即時処理され、削除後のデータ復旧は技術的に不可能です。</p>
+      <p>サービスを再度利用するには、新しいアカウントを作成する必要があります。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-4">
+      <div class="section-number">04</div>
+      <h2>サブスクリプションの取消</h2>
+      <div class="highlight-box orange">アカウント削除前に有効なサブスクリプションを必ず取り消してください。アカウント削除だけではサブスクリプションが自動取消されない場合があります。</div>
+      <p>Google Play：Google Playアプリ → 定期購入 → CardSpend → 定期購入を解約</p>
+      <p>Apple：設定 → Apple ID → サブスクリプション → CardSpend → サブスクリプションをキャンセル</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-5">
+      <div class="section-number">05</div>
+      <h2>お問い合わせ</h2>
+      <p>アカウント削除に関するお問い合わせ：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2026 OllanVin &middot; CardSpend &middot; <a href="mailto:founder@idolab.ai">founder@idolab.ai</a>
+</div>
+
+<script>
+  var titles = { ko: '계정 삭제', en: 'Account Deletion', zh: '删除账户', ja: 'アカウント削除' };
+  var subtitles = { ko: '시행일: 2026년 4월 3일 · CardSpend by OllanVin', en: 'Effective: April 3, 2026 · CardSpend by OllanVin', zh: '生效日期：2026年4月3日 · CardSpend by OllanVin', ja: '施行日：2026年4月3日 · CardSpend by OllanVin' };
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-content').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.lang-tab').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('lang-' + lang).classList.add('active');
+    document.querySelector('[onclick="switchLang(\'' + lang + '\')"]').classList.add('active');
+    document.getElementById('page-title').textContent = titles[lang];
+    document.getElementById('page-subtitle').textContent = subtitles[lang];
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+    // Update nav labels
+    ['ko','en','zh','ja'].forEach(function(l) {
+      document.querySelectorAll('.nav-' + l).forEach(function(el) {
+        el.style.display = l === lang ? '' : 'none';
+      });
+    });
+  }
+</script>
+</body>
+</html>

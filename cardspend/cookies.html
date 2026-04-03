@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="doc-title">쿠키 정책 — CardSpend</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --green: #059669;
+    --green-light: #ecfdf5;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --orange: #d97706;
+    --orange-light: #fffbeb;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Nav */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .nav a {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav a:hover { background: var(--accent-light); color: var(--accent); }
+  .nav a.active { background: var(--accent); color: #fff; }
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner { max-width: 720px; margin: 0 auto; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+  .lang-tabs { display: flex; gap: 0; }
+  .lang-tab {
+    padding: 10px 20px; font-size: 14px; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; border-bottom: 2px solid transparent;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .lang-tab:hover { color: var(--text-primary); }
+  .lang-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  /* Main */
+  .main { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px 28px; margin-bottom: 40px;
+  }
+  .toc-title {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 12px;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li { counter-increment: toc; margin-bottom: 6px; }
+  .toc li a {
+    font-size: 15px; color: var(--text-primary); text-decoration: none;
+    display: flex; align-items: baseline; gap: 8px; transition: color 0.15s;
+  }
+  .toc li a::before { content: counter(toc) "."; font-weight: 600; color: var(--accent); min-width: 20px; }
+  .toc li a:hover { color: var(--accent); }
+  .section { margin-bottom: 36px; }
+  .section-number { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+  .section h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px; }
+  .section h3 { font-size: 16px; font-weight: 600; margin: 16px 0 8px; }
+  .section p { font-size: 15px; color: var(--text-secondary); margin-bottom: 12px; }
+  .section ul { margin: 8px 0 16px 20px; }
+  .section ul li { font-size: 15px; color: var(--text-secondary); margin-bottom: 6px; }
+  .data-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .data-tag {
+    display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  }
+  .data-tag.collect { background: var(--accent-light); color: var(--accent); }
+  .data-tag.no-collect { background: var(--red-light); color: var(--red); }
+  .data-tag.safe { background: var(--green-light); color: var(--green); }
+  .data-tag.warn { background: var(--orange-light); color: var(--orange); }
+  .highlight-box {
+    background: var(--green-light); border-left: 3px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px; margin: 12px 0; font-size: 14px; color: #065f46;
+  }
+  .highlight-box.warn { background: var(--red-light); border-left-color: var(--red); color: #991b1b; }
+  .highlight-box.info { background: var(--accent-light); border-left-color: var(--accent); color: #1e40af; }
+  .highlight-box.orange { background: var(--orange-light); border-left-color: var(--orange); color: #92400e; }
+  .divider { height: 1px; background: var(--border); margin: 36px 0; }
+  .footer {
+    text-align: center; padding: 24px; font-size: 13px; color: var(--text-secondary);
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .lang-content { display: none; }
+  .lang-content.active { display: block; }
+  .step-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin: 12px 0;
+  }
+  .step-num {
+    display: inline-block; width: 28px; height: 28px; line-height: 28px;
+    text-align: center; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 13px; font-weight: 700; margin-right: 10px;
+  }
+  .sdk-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px; margin: 10px 0;
+  }
+  .sdk-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .sdk-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+  @media (max-width: 640px) {
+    .nav { padding: 10px 12px; }
+    .nav a { font-size: 11px; padding: 4px 6px; }
+    .header { padding: 24px 16px 0; }
+    .header h1 { font-size: 22px; }
+    .main { padding: 24px 16px 60px; }
+    .lang-tab { padding: 10px 14px; font-size: 13px; }
+    .toc { padding: 20px; }
+    .section h2 { font-size: 18px; }
+    .data-tag { padding: 5px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">CardSpend Legal</span>
+    <a href="privacy.html"><span class="nav-ko">개인정보</span><span class="nav-en" style="display:none">Privacy</span><span class="nav-zh" style="display:none">隐私政策</span><span class="nav-ja" style="display:none">プライバシー</span></a><a href="terms.html"><span class="nav-ko">이용약관</span><span class="nav-en" style="display:none">Terms</span><span class="nav-zh" style="display:none">使用条款</span><span class="nav-ja" style="display:none">利用規約</span></a><a href="refund.html"><span class="nav-ko">환불정책</span><span class="nav-en" style="display:none">Refund</span><span class="nav-zh" style="display:none">退款</span><span class="nav-ja" style="display:none">返金</span></a><a href="account-deletion.html"><span class="nav-ko">계정삭제</span><span class="nav-en" style="display:none">Deletion</span><span class="nav-zh" style="display:none">删除账户</span><span class="nav-ja" style="display:none">アカウント削除</span></a><a href="cookies.html" class="active"><span class="nav-ko">쿠키</span><span class="nav-en" style="display:none">Cookies</span><span class="nav-zh" style="display:none">Cookie</span><span class="nav-ja" style="display:none">Cookie</span></a><a href="eula.html"><span class="nav-ko">EULA</span><span class="nav-en" style="display:none">EULA</span><span class="nav-zh" style="display:none">EULA</span><span class="nav-ja" style="display:none">EULA</span></a><a href="data-safety.html"><span class="nav-ko">데이터안전</span><span class="nav-en" style="display:none">Data Safety</span><span class="nav-zh" style="display:none">数据安全</span><span class="nav-ja" style="display:none">データ安全</span></a><a href="ai-disclosure.html"><span class="nav-ko">AI공개</span><span class="nav-en" style="display:none">AI</span><span class="nav-zh" style="display:none">AI披露</span><span class="nav-ja" style="display:none">AI開示</span></a><a href="third-party-sdks.html"><span class="nav-ko">SDK</span><span class="nav-en" style="display:none">SDK</span><span class="nav-zh" style="display:none">SDK</span><span class="nav-ja" style="display:none">SDK</span></a><a href="subscription.html"><span class="nav-ko">구독</span><span class="nav-en" style="display:none">Subscribe</span><span class="nav-zh" style="display:none">订阅</span><span class="nav-ja" style="display:none">サブスク</span></a><a href="support.html"><span class="nav-ko">지원</span><span class="nav-en" style="display:none">Support</span><span class="nav-zh" style="display:none">支持</span><span class="nav-ja" style="display:none">サポート</span></a><a href="legal.html"><span class="nav-ko">법적고지</span><span class="nav-en" style="display:none">Legal</span><span class="nav-zh" style="display:none">法律</span><span class="nav-ja" style="display:none">法的事項</span></a><a href="children.html"><span class="nav-ko">아동보호</span><span class="nav-en" style="display:none">Children</span><span class="nav-zh" style="display:none">儿童</span><span class="nav-ja" style="display:none">児童</span></a>
+  </div>
+</nav>
+
+<div class="header">
+  <div class="header-inner">
+    <h1 id="page-title">쿠키 정책</h1>
+    <p class="subtitle" id="page-subtitle">시행일: 2026년 4월 3일 · CardSpend by OllanVin</p>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="switchLang('ko')">한국어</button>
+      <button class="lang-tab" onclick="switchLang('en')">English</button>
+      <button class="lang-tab" onclick="switchLang('zh')">中文</button>
+      <button class="lang-tab" onclick="switchLang('ja')">日本語</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="lang-content active" id="lang-ko">
+    <div class="toc">
+      <div class="toc-title">목차</div>
+      <ol>
+        <li><a href="#ko-1">쿠키란</a></li>
+        <li><a href="#ko-2">사용하는 쿠키</a></li>
+        <li><a href="#ko-3">쿠키 목적</a></li>
+        <li><a href="#ko-4">쿠키 거부 방법</a></li>
+        <li><a href="#ko-5">GDPR 준수</a></li>
+        <li><a href="#ko-6">문의</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ko-1">
+      <div class="section-number">01</div>
+      <h2>쿠키란</h2>
+      <p>쿠키는 웹사이트 방문 시 브라우저에 저장되는 작은 텍스트 파일입니다. CardSpend 웹사이트에서는 최소한의 쿠키만 사용합니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-2">
+      <div class="section-number">02</div>
+      <h2>사용하는 쿠키</h2>
+      <div class="data-list">
+        <span class="data-tag safe">필수 쿠키</span>
+        <span class="data-tag safe">보안 쿠키</span>
+      </div>
+      <p>CardSpend 웹사이트는 광고 쿠키, 추적 쿠키, 분석 쿠키를 사용하지 않습니다.</p>
+      <div class="highlight-box">CardSpend 모바일 앱은 쿠키를 사용하지 않습니다.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-3">
+      <div class="section-number">03</div>
+      <h2>쿠키 목적</h2>
+      <ul>
+        <li><strong>필수 쿠키:</strong> 웹사이트의 기본 기능 (언어 설정 등) 제공</li>
+        <li><strong>보안 쿠키:</strong> CSRF 보호 등 보안 기능 지원</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-4">
+      <div class="section-number">04</div>
+      <h2>쿠키 거부 방법</h2>
+      <p>브라우저 설정에서 쿠키를 차단하거나 삭제할 수 있습니다. 필수 쿠키를 차단하면 일부 기능이 제한될 수 있습니다.</p>
+      <ul>
+        <li>Chrome: 설정 → 개인정보 보호 및 보안 → 쿠키</li>
+        <li>Safari: 환경설정 → 개인 정보 보호</li>
+        <li>Firefox: 설정 → 개인 정보 및 보안</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-5">
+      <div class="section-number">05</div>
+      <h2>GDPR 준수</h2>
+      <p>EU/EEA 사용자의 경우, 필수 쿠키를 제외한 모든 쿠키는 동의 후에만 설정됩니다.</p>
+      <div class="highlight-box info">CardSpend는 GDPR 제6조에 따라 정당한 이익 또는 명시적 동의를 법적 근거로 쿠키를 사용합니다.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-6">
+      <div class="section-number">06</div>
+      <h2>문의</h2>
+      <p>쿠키 관련 문의: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-en">
+    <div class="toc">
+      <div class="toc-title">Table of Contents</div>
+      <ol>
+        <li><a href="#en-1">What Are Cookies</a></li>
+        <li><a href="#en-2">Cookies We Use</a></li>
+        <li><a href="#en-3">Cookie Purposes</a></li>
+        <li><a href="#en-4">How to Refuse Cookies</a></li>
+        <li><a href="#en-5">GDPR Compliance</a></li>
+        <li><a href="#en-6">Contact</a></li>
+      </ol>
+    </div>
+    <div class="section" id="en-1">
+      <div class="section-number">01</div>
+      <h2>What Are Cookies</h2>
+      <p>Cookies are small text files stored in your browser when you visit a website. The CardSpend website uses only minimal cookies.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-2">
+      <div class="section-number">02</div>
+      <h2>Cookies We Use</h2>
+      <div class="data-list">
+        <span class="data-tag safe">Essential cookies</span>
+        <span class="data-tag safe">Security cookies</span>
+      </div>
+      <p>The CardSpend website does not use advertising, tracking, or analytics cookies.</p>
+      <div class="highlight-box">The CardSpend mobile app does not use cookies.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-3">
+      <div class="section-number">03</div>
+      <h2>Cookie Purposes</h2>
+      <ul>
+        <li><strong>Essential cookies:</strong> Basic website functionality (language preferences, etc.)</li>
+        <li><strong>Security cookies:</strong> Security features such as CSRF protection</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-4">
+      <div class="section-number">04</div>
+      <h2>How to Refuse Cookies</h2>
+      <p>You can block or delete cookies in your browser settings. Blocking essential cookies may limit some functionality.</p>
+      <ul>
+        <li>Chrome: Settings → Privacy and Security → Cookies</li>
+        <li>Safari: Preferences → Privacy</li>
+        <li>Firefox: Settings → Privacy &amp; Security</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-5">
+      <div class="section-number">05</div>
+      <h2>GDPR Compliance</h2>
+      <p>For EU/EEA users, all cookies except essential ones are set only with your consent.</p>
+      <div class="highlight-box info">CardSpend uses cookies based on legitimate interest or explicit consent under GDPR Article 6.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-6">
+      <div class="section-number">06</div>
+      <h2>Contact</h2>
+      <p>Cookie inquiries: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-zh">
+    <div class="toc">
+      <div class="toc-title">目录</div>
+      <ol>
+        <li><a href="#zh-1">什么是Cookie</a></li>
+        <li><a href="#zh-2">我们使用的Cookie</a></li>
+        <li><a href="#zh-3">Cookie用途</a></li>
+        <li><a href="#zh-4">如何拒绝Cookie</a></li>
+        <li><a href="#zh-5">GDPR合规</a></li>
+        <li><a href="#zh-6">联系方式</a></li>
+      </ol>
+    </div>
+    <div class="section" id="zh-1">
+      <div class="section-number">01</div>
+      <h2>什么是Cookie</h2>
+      <p>Cookie是访问网站时存储在浏览器中的小型文本文件。CardSpend网站仅使用最少量的Cookie。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-2">
+      <div class="section-number">02</div>
+      <h2>我们使用的Cookie</h2>
+      <div class="data-list">
+        <span class="data-tag safe">必要Cookie</span>
+        <span class="data-tag safe">安全Cookie</span>
+      </div>
+      <p>CardSpend网站不使用广告、跟踪或分析Cookie。</p>
+      <div class="highlight-box">CardSpend移动应用不使用Cookie。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-3">
+      <div class="section-number">03</div>
+      <h2>Cookie用途</h2>
+      <ul>
+        <li><strong>必要Cookie：</strong>网站基本功能（语言设置等）</li>
+        <li><strong>安全Cookie：</strong>CSRF保护等安全功能</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-4">
+      <div class="section-number">04</div>
+      <h2>如何拒绝Cookie</h2>
+      <p>您可以在浏览器设置中阻止或删除Cookie。阻止必要Cookie可能会限制部分功能。</p>
+      <ul>
+        <li>Chrome：设置 → 隐私和安全 → Cookie</li>
+        <li>Safari：偏好设置 → 隐私</li>
+        <li>Firefox：设置 → 隐私与安全</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-5">
+      <div class="section-number">05</div>
+      <h2>GDPR合规</h2>
+      <p>对于EU/EEA用户，除必要Cookie外，所有Cookie仅在获得同意后设置。</p>
+      <div class="highlight-box info">CardSpend根据GDPR第6条基于合法利益或明确同意使用Cookie。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-6">
+      <div class="section-number">06</div>
+      <h2>联系方式</h2>
+      <p>Cookie相关咨询：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-ja">
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+        <li><a href="#ja-1">Cookieとは</a></li>
+        <li><a href="#ja-2">使用するCookie</a></li>
+        <li><a href="#ja-3">Cookieの目的</a></li>
+        <li><a href="#ja-4">Cookieの拒否方法</a></li>
+        <li><a href="#ja-5">GDPR準拠</a></li>
+        <li><a href="#ja-6">お問い合わせ</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ja-1">
+      <div class="section-number">01</div>
+      <h2>Cookieとは</h2>
+      <p>Cookieとは、ウェブサイト訪問時にブラウザに保存される小さなテキストファイルです。CardSpendウェブサイトでは最小限のCookieのみを使用します。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-2">
+      <div class="section-number">02</div>
+      <h2>使用するCookie</h2>
+      <div class="data-list">
+        <span class="data-tag safe">必須Cookie</span>
+        <span class="data-tag safe">セキュリティCookie</span>
+      </div>
+      <p>CardSpendウェブサイトは広告、トラッキング、分析Cookieを使用しません。</p>
+      <div class="highlight-box">CardSpendモバイルアプリはCookieを使用しません。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-3">
+      <div class="section-number">03</div>
+      <h2>Cookieの目的</h2>
+      <ul>
+        <li><strong>必須Cookie：</strong>ウェブサイトの基本機能（言語設定等）</li>
+        <li><strong>セキュリティCookie：</strong>CSRF保護等のセキュリティ機能</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-4">
+      <div class="section-number">04</div>
+      <h2>Cookieの拒否方法</h2>
+      <p>ブラウザの設定でCookieをブロックまたは削除できます。必須Cookieをブロックすると一部機能が制限される場合があります。</p>
+      <ul>
+        <li>Chrome：設定 → プライバシーとセキュリティ → Cookie</li>
+        <li>Safari：環境設定 → プライバシー</li>
+        <li>Firefox：設定 → プライバシーとセキュリティ</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-5">
+      <div class="section-number">05</div>
+      <h2>GDPR準拠</h2>
+      <p>EU/EEAユーザーの場合、必須Cookie以外のすべてのCookieは同意を得た後にのみ設定されます。</p>
+      <div class="highlight-box info">CardSpendはGDPR第6条に基づき、正当な利益または明示的同意を法的根拠としてCookieを使用します。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-6">
+      <div class="section-number">06</div>
+      <h2>お問い合わせ</h2>
+      <p>Cookieに関するお問い合わせ：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2026 OllanVin &middot; CardSpend &middot; <a href="mailto:founder@idolab.ai">founder@idolab.ai</a>
+</div>
+
+<script>
+  var titles = { ko: '쿠키 정책', en: 'Cookie Policy', zh: 'Cookie政策', ja: 'Cookieポリシー' };
+  var subtitles = { ko: '시행일: 2026년 4월 3일 · CardSpend by OllanVin', en: 'Effective: April 3, 2026 · CardSpend by OllanVin', zh: '生效日期：2026年4月3日 · CardSpend by OllanVin', ja: '施行日：2026年4月3日 · CardSpend by OllanVin' };
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-content').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.lang-tab').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('lang-' + lang).classList.add('active');
+    document.querySelector('[onclick="switchLang(\'' + lang + '\')"]').classList.add('active');
+    document.getElementById('page-title').textContent = titles[lang];
+    document.getElementById('page-subtitle').textContent = subtitles[lang];
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+    // Update nav labels
+    ['ko','en','zh','ja'].forEach(function(l) {
+      document.querySelectorAll('.nav-' + l).forEach(function(el) {
+        el.style.display = l === lang ? '' : 'none';
+      });
+    });
+  }
+</script>
+</body>
+</html>

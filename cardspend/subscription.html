@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="doc-title">구독 약관 — CardSpend</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --green: #059669;
+    --green-light: #ecfdf5;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --orange: #d97706;
+    --orange-light: #fffbeb;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Nav */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .nav a {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav a:hover { background: var(--accent-light); color: var(--accent); }
+  .nav a.active { background: var(--accent); color: #fff; }
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner { max-width: 720px; margin: 0 auto; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+  .lang-tabs { display: flex; gap: 0; }
+  .lang-tab {
+    padding: 10px 20px; font-size: 14px; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; border-bottom: 2px solid transparent;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .lang-tab:hover { color: var(--text-primary); }
+  .lang-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  /* Main */
+  .main { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px 28px; margin-bottom: 40px;
+  }
+  .toc-title {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 12px;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li { counter-increment: toc; margin-bottom: 6px; }
+  .toc li a {
+    font-size: 15px; color: var(--text-primary); text-decoration: none;
+    display: flex; align-items: baseline; gap: 8px; transition: color 0.15s;
+  }
+  .toc li a::before { content: counter(toc) "."; font-weight: 600; color: var(--accent); min-width: 20px; }
+  .toc li a:hover { color: var(--accent); }
+  .section { margin-bottom: 36px; }
+  .section-number { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+  .section h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px; }
+  .section h3 { font-size: 16px; font-weight: 600; margin: 16px 0 8px; }
+  .section p { font-size: 15px; color: var(--text-secondary); margin-bottom: 12px; }
+  .section ul { margin: 8px 0 16px 20px; }
+  .section ul li { font-size: 15px; color: var(--text-secondary); margin-bottom: 6px; }
+  .data-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .data-tag {
+    display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  }
+  .data-tag.collect { background: var(--accent-light); color: var(--accent); }
+  .data-tag.no-collect { background: var(--red-light); color: var(--red); }
+  .data-tag.safe { background: var(--green-light); color: var(--green); }
+  .data-tag.warn { background: var(--orange-light); color: var(--orange); }
+  .highlight-box {
+    background: var(--green-light); border-left: 3px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px; margin: 12px 0; font-size: 14px; color: #065f46;
+  }
+  .highlight-box.warn { background: var(--red-light); border-left-color: var(--red); color: #991b1b; }
+  .highlight-box.info { background: var(--accent-light); border-left-color: var(--accent); color: #1e40af; }
+  .highlight-box.orange { background: var(--orange-light); border-left-color: var(--orange); color: #92400e; }
+  .divider { height: 1px; background: var(--border); margin: 36px 0; }
+  .footer {
+    text-align: center; padding: 24px; font-size: 13px; color: var(--text-secondary);
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .lang-content { display: none; }
+  .lang-content.active { display: block; }
+  .step-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin: 12px 0;
+  }
+  .step-num {
+    display: inline-block; width: 28px; height: 28px; line-height: 28px;
+    text-align: center; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 13px; font-weight: 700; margin-right: 10px;
+  }
+  .sdk-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px; margin: 10px 0;
+  }
+  .sdk-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .sdk-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+  @media (max-width: 640px) {
+    .nav { padding: 10px 12px; }
+    .nav a { font-size: 11px; padding: 4px 6px; }
+    .header { padding: 24px 16px 0; }
+    .header h1 { font-size: 22px; }
+    .main { padding: 24px 16px 60px; }
+    .lang-tab { padding: 10px 14px; font-size: 13px; }
+    .toc { padding: 20px; }
+    .section h2 { font-size: 18px; }
+    .data-tag { padding: 5px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">CardSpend Legal</span>
+    <a href="privacy.html"><span class="nav-ko">개인정보</span><span class="nav-en" style="display:none">Privacy</span><span class="nav-zh" style="display:none">隐私政策</span><span class="nav-ja" style="display:none">プライバシー</span></a><a href="terms.html"><span class="nav-ko">이용약관</span><span class="nav-en" style="display:none">Terms</span><span class="nav-zh" style="display:none">使用条款</span><span class="nav-ja" style="display:none">利用規約</span></a><a href="refund.html"><span class="nav-ko">환불정책</span><span class="nav-en" style="display:none">Refund</span><span class="nav-zh" style="display:none">退款</span><span class="nav-ja" style="display:none">返金</span></a><a href="account-deletion.html"><span class="nav-ko">계정삭제</span><span class="nav-en" style="display:none">Deletion</span><span class="nav-zh" style="display:none">删除账户</span><span class="nav-ja" style="display:none">アカウント削除</span></a><a href="cookies.html"><span class="nav-ko">쿠키</span><span class="nav-en" style="display:none">Cookies</span><span class="nav-zh" style="display:none">Cookie</span><span class="nav-ja" style="display:none">Cookie</span></a><a href="eula.html"><span class="nav-ko">EULA</span><span class="nav-en" style="display:none">EULA</span><span class="nav-zh" style="display:none">EULA</span><span class="nav-ja" style="display:none">EULA</span></a><a href="data-safety.html"><span class="nav-ko">데이터안전</span><span class="nav-en" style="display:none">Data Safety</span><span class="nav-zh" style="display:none">数据安全</span><span class="nav-ja" style="display:none">データ安全</span></a><a href="ai-disclosure.html"><span class="nav-ko">AI공개</span><span class="nav-en" style="display:none">AI</span><span class="nav-zh" style="display:none">AI披露</span><span class="nav-ja" style="display:none">AI開示</span></a><a href="third-party-sdks.html"><span class="nav-ko">SDK</span><span class="nav-en" style="display:none">SDK</span><span class="nav-zh" style="display:none">SDK</span><span class="nav-ja" style="display:none">SDK</span></a><a href="subscription.html" class="active"><span class="nav-ko">구독</span><span class="nav-en" style="display:none">Subscribe</span><span class="nav-zh" style="display:none">订阅</span><span class="nav-ja" style="display:none">サブスク</span></a><a href="support.html"><span class="nav-ko">지원</span><span class="nav-en" style="display:none">Support</span><span class="nav-zh" style="display:none">支持</span><span class="nav-ja" style="display:none">サポート</span></a><a href="legal.html"><span class="nav-ko">법적고지</span><span class="nav-en" style="display:none">Legal</span><span class="nav-zh" style="display:none">法律</span><span class="nav-ja" style="display:none">法的事項</span></a><a href="children.html"><span class="nav-ko">아동보호</span><span class="nav-en" style="display:none">Children</span><span class="nav-zh" style="display:none">儿童</span><span class="nav-ja" style="display:none">児童</span></a>
+  </div>
+</nav>
+
+<div class="header">
+  <div class="header-inner">
+    <h1 id="page-title">구독 약관</h1>
+    <p class="subtitle" id="page-subtitle">시행일: 2026년 4월 3일 · CardSpend by OllanVin</p>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="switchLang('ko')">한국어</button>
+      <button class="lang-tab" onclick="switchLang('en')">English</button>
+      <button class="lang-tab" onclick="switchLang('zh')">中文</button>
+      <button class="lang-tab" onclick="switchLang('ja')">日本語</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="lang-content active" id="lang-ko">
+    <div class="toc">
+      <div class="toc-title">목차</div>
+      <ol>
+        <li><a href="#ko-1">구독 플랜</a></li>
+        <li><a href="#ko-2">무료 체험</a></li>
+        <li><a href="#ko-3">자동 갱신</a></li>
+        <li><a href="#ko-4">취소 방법</a></li>
+        <li><a href="#ko-5">가격 변경</a></li>
+        <li><a href="#ko-6">문의</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ko-1">
+      <div class="section-number">01</div>
+      <h2>구독 플랜</h2>
+      <p>CardSpend 프리미엄 구독은 월간 및 연간 플랜으로 제공됩니다.</p>
+      <ul>
+        <li>가격은 앱 스토어(Google Play / Apple App Store)에서 확인 가능합니다</li>
+        <li>가격은 현지 통화로 표시되며, 세금이 별도 부과될 수 있습니다</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-2">
+      <div class="section-number">02</div>
+      <h2>무료 체험</h2>
+      <p>첫 구독 시 무료 체험 기간이 제공될 수 있습니다.</p>
+      <div class="highlight-box orange">무료 체험 기간 종료 전에 취소하지 않으면 자동으로 유료 구독으로 전환됩니다.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-3">
+      <div class="section-number">03</div>
+      <h2>자동 갱신</h2>
+      <p>구독은 취소하지 않는 한 현재 구독 기간 종료 시 자동으로 갱신됩니다.</p>
+      <p>갱신 결제는 현재 기간 종료 24시간 전에 처리됩니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-4">
+      <div class="section-number">04</div>
+      <h2>취소 방법</h2>
+      <p>Google Play: Google Play 앱 → 구독 → CardSpend → 구독 취소</p>
+      <p>Apple: 설정 → Apple ID → 구독 → CardSpend → 구독 취소</p>
+      <div class="highlight-box info">앱을 삭제하는 것만으로는 구독이 취소되지 않습니다. 반드시 스토어에서 취소해야 합니다.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-5">
+      <div class="section-number">05</div>
+      <h2>가격 변경</h2>
+      <p>가격 변경 시 최소 30일 전에 사전 통지합니다. 변경된 가격에 동의하지 않는 경우 갱신 전에 구독을 취소할 수 있습니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-6">
+      <div class="section-number">06</div>
+      <h2>문의</h2>
+      <p>구독 관련 문의: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-en">
+    <div class="toc">
+      <div class="toc-title">Table of Contents</div>
+      <ol>
+        <li><a href="#en-1">Subscription Plans</a></li>
+        <li><a href="#en-2">Free Trial</a></li>
+        <li><a href="#en-3">Auto-Renewal</a></li>
+        <li><a href="#en-4">How to Cancel</a></li>
+        <li><a href="#en-5">Price Changes</a></li>
+        <li><a href="#en-6">Contact</a></li>
+      </ol>
+    </div>
+    <div class="section" id="en-1">
+      <div class="section-number">01</div>
+      <h2>Subscription Plans</h2>
+      <p>CardSpend Premium is available as monthly and annual plans.</p>
+      <ul>
+        <li>Pricing is available on the app store (Google Play / Apple App Store)</li>
+        <li>Prices are displayed in local currency and may be subject to tax</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-2">
+      <div class="section-number">02</div>
+      <h2>Free Trial</h2>
+      <p>A free trial period may be offered with your first subscription.</p>
+      <div class="highlight-box orange">If you do not cancel before the free trial ends, your subscription will automatically convert to a paid plan.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-3">
+      <div class="section-number">03</div>
+      <h2>Auto-Renewal</h2>
+      <p>Subscriptions auto-renew at the end of each period unless cancelled.</p>
+      <p>Renewal payment is processed 24 hours before the current period ends.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-4">
+      <div class="section-number">04</div>
+      <h2>How to Cancel</h2>
+      <p>Google Play: Google Play app → Subscriptions → CardSpend → Cancel</p>
+      <p>Apple: Settings → Apple ID → Subscriptions → CardSpend → Cancel</p>
+      <div class="highlight-box info">Deleting the app alone does not cancel your subscription. You must cancel through the store.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-5">
+      <div class="section-number">05</div>
+      <h2>Price Changes</h2>
+      <p>We will notify you at least 30 days before any price changes. If you do not agree with the new price, you may cancel before renewal.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-6">
+      <div class="section-number">06</div>
+      <h2>Contact</h2>
+      <p>Subscription inquiries: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-zh">
+    <div class="toc">
+      <div class="toc-title">目录</div>
+      <ol>
+        <li><a href="#zh-1">订阅计划</a></li>
+        <li><a href="#zh-2">免费试用</a></li>
+        <li><a href="#zh-3">自动续订</a></li>
+        <li><a href="#zh-4">取消方法</a></li>
+        <li><a href="#zh-5">价格变更</a></li>
+        <li><a href="#zh-6">联系方式</a></li>
+      </ol>
+    </div>
+    <div class="section" id="zh-1">
+      <div class="section-number">01</div>
+      <h2>订阅计划</h2>
+      <p>CardSpend高级版提供月度和年度计划。</p>
+      <ul>
+        <li>价格可在应用商店（Google Play/Apple App Store）查看</li>
+        <li>价格以当地货币显示，可能需另付税款</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-2">
+      <div class="section-number">02</div>
+      <h2>免费试用</h2>
+      <p>首次订阅可能提供免费试用期。</p>
+      <div class="highlight-box orange">如果在免费试用期结束前未取消，将自动转为付费订阅。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-3">
+      <div class="section-number">03</div>
+      <h2>自动续订</h2>
+      <p>订阅将在每个周期结束时自动续订，除非取消。</p>
+      <p>续订付款将在当前周期结束前24小时处理。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-4">
+      <div class="section-number">04</div>
+      <h2>取消方法</h2>
+      <p>Google Play：Google Play应用 → 订阅 → CardSpend → 取消订阅</p>
+      <p>Apple：设置 → Apple ID → 订阅 → CardSpend → 取消订阅</p>
+      <div class="highlight-box info">仅删除应用不会取消订阅。必须通过商店取消。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-5">
+      <div class="section-number">05</div>
+      <h2>价格变更</h2>
+      <p>价格变更将至少提前30天通知。如不同意新价格，可在续订前取消订阅。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-6">
+      <div class="section-number">06</div>
+      <h2>联系方式</h2>
+      <p>订阅相关咨询：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-ja">
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+        <li><a href="#ja-1">サブスクリプションプラン</a></li>
+        <li><a href="#ja-2">無料トライアル</a></li>
+        <li><a href="#ja-3">自動更新</a></li>
+        <li><a href="#ja-4">キャンセル方法</a></li>
+        <li><a href="#ja-5">価格変更</a></li>
+        <li><a href="#ja-6">お問い合わせ</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ja-1">
+      <div class="section-number">01</div>
+      <h2>サブスクリプションプラン</h2>
+      <p>CardSpendプレミアムは月間および年間プランで提供されます。</p>
+      <ul>
+        <li>価格はアプリストア（Google Play / Apple App Store）でご確認いただけます</li>
+        <li>価格は現地通貨で表示され、税金が別途かかる場合があります</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-2">
+      <div class="section-number">02</div>
+      <h2>無料トライアル</h2>
+      <p>初回サブスクリプション時に無料トライアル期間が提供される場合があります。</p>
+      <div class="highlight-box orange">無料トライアル期間終了前にキャンセルしない場合、自動的に有料サブスクリプションに移行します。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-3">
+      <div class="section-number">03</div>
+      <h2>自動更新</h2>
+      <p>サブスクリプションはキャンセルしない限り、各期間終了時に自動更新されます。</p>
+      <p>更新決済は現在の期間終了24時間前に処理されます。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-4">
+      <div class="section-number">04</div>
+      <h2>キャンセル方法</h2>
+      <p>Google Play：Google Playアプリ → 定期購入 → CardSpend → 定期購入を解約</p>
+      <p>Apple：設定 → Apple ID → サブスクリプション → CardSpend → サブスクリプションをキャンセル</p>
+      <div class="highlight-box info">アプリを削除するだけではサブスクリプションはキャンセルされません。必ずストアからキャンセルしてください。</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-5">
+      <div class="section-number">05</div>
+      <h2>価格変更</h2>
+      <p>価格変更の場合、少なくとも30日前に事前通知します。新しい価格に同意しない場合は、更新前にサブスクリプションをキャンセルできます。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-6">
+      <div class="section-number">06</div>
+      <h2>お問い合わせ</h2>
+      <p>サブスクリプションに関するお問い合わせ：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2026 OllanVin &middot; CardSpend &middot; <a href="mailto:founder@idolab.ai">founder@idolab.ai</a>
+</div>
+
+<script>
+  var titles = { ko: '구독 약관', en: 'Subscription Terms', zh: '订阅条款', ja: 'サブスクリプション規約' };
+  var subtitles = { ko: '시행일: 2026년 4월 3일 · CardSpend by OllanVin', en: 'Effective: April 3, 2026 · CardSpend by OllanVin', zh: '生效日期：2026年4月3日 · CardSpend by OllanVin', ja: '施行日：2026年4月3日 · CardSpend by OllanVin' };
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-content').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.lang-tab').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('lang-' + lang).classList.add('active');
+    document.querySelector('[onclick="switchLang(\'' + lang + '\')"]').classList.add('active');
+    document.getElementById('page-title').textContent = titles[lang];
+    document.getElementById('page-subtitle').textContent = subtitles[lang];
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+    // Update nav labels
+    ['ko','en','zh','ja'].forEach(function(l) {
+      document.querySelectorAll('.nav-' + l).forEach(function(el) {
+        el.style.display = l === lang ? '' : 'none';
+      });
+    });
+  }
+</script>
+</body>
+</html>

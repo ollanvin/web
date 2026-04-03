@@ -4,10 +4,135 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CardSpend — 카드 실적 관리</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .hero {
+    text-align: center;
+    padding: 80px 24px 40px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 { font-size: 36px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; }
+  .hero p { font-size: 16px; color: var(--text-secondary); margin-bottom: 8px; }
+  .hero .tagline { font-size: 18px; color: var(--accent); font-weight: 600; margin-bottom: 24px; }
+  .main { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+  .main h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+  .legal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .legal-card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.15s;
+  }
+  .legal-card:hover { border-color: var(--accent); background: var(--accent-light); }
+  .legal-card .card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .legal-card .card-desc { font-size: 12px; color: var(--text-secondary); }
+  .footer {
+    text-align: center; padding: 24px; font-size: 13px; color: var(--text-secondary);
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 640px) {
+    .hero { padding: 60px 16px 32px; }
+    .hero h1 { font-size: 28px; }
+    .main { padding: 32px 16px 60px; }
+    .legal-grid { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
-<h1>CardSpend</h1>
-<p>지금 이 결제, 해도 되는지 바로 확인</p>
-<p><a href="/cardspend/privacy.html">개인정보처리방침</a></p>
+
+<div class="hero">
+  <h1>CardSpend</h1>
+  <p class="tagline">지금 이 결제, 해도 되는지 바로 확인</p>
+  <p>카드 실적 · 결제 위험 · 손해 금액까지 한 번에</p>
+</div>
+
+<div class="main">
+  <h2>Legal &amp; Policies</h2>
+  <div class="legal-grid">
+    <a href="privacy.html" class="legal-card">
+      <div class="card-title">개인정보처리방침</div>
+      <div class="card-desc">Privacy Policy</div>
+    </a>
+    <a href="terms.html" class="legal-card">
+      <div class="card-title">이용약관</div>
+      <div class="card-desc">Terms of Service</div>
+    </a>
+    <a href="refund.html" class="legal-card">
+      <div class="card-title">환불 정책</div>
+      <div class="card-desc">Refund Policy</div>
+    </a>
+    <a href="account-deletion.html" class="legal-card">
+      <div class="card-title">계정 삭제</div>
+      <div class="card-desc">Account Deletion</div>
+    </a>
+    <a href="cookies.html" class="legal-card">
+      <div class="card-title">쿠키 정책</div>
+      <div class="card-desc">Cookie Policy</div>
+    </a>
+    <a href="eula.html" class="legal-card">
+      <div class="card-title">EULA</div>
+      <div class="card-desc">End User License Agreement</div>
+    </a>
+    <a href="data-safety.html" class="legal-card">
+      <div class="card-title">데이터 안전</div>
+      <div class="card-desc">Data Safety</div>
+    </a>
+    <a href="ai-disclosure.html" class="legal-card">
+      <div class="card-title">AI 사용 공개</div>
+      <div class="card-desc">AI Disclosure</div>
+    </a>
+    <a href="third-party-sdks.html" class="legal-card">
+      <div class="card-title">서드파티 SDK</div>
+      <div class="card-desc">Third-Party SDKs</div>
+    </a>
+    <a href="subscription.html" class="legal-card">
+      <div class="card-title">구독 약관</div>
+      <div class="card-desc">Subscription Terms</div>
+    </a>
+    <a href="support.html" class="legal-card">
+      <div class="card-title">고객 지원</div>
+      <div class="card-desc">Customer Support</div>
+    </a>
+    <a href="legal.html" class="legal-card">
+      <div class="card-title">법적 고지</div>
+      <div class="card-desc">Legal Notice</div>
+    </a>
+    <a href="children.html" class="legal-card">
+      <div class="card-title">아동 보호</div>
+      <div class="card-desc">Children's Privacy</div>
+    </a>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2026 OllanVin &middot; CardSpend &middot; <a href="mailto:founder@idolab.ai">founder@idolab.ai</a>
+</div>
+
 </body>
 </html>

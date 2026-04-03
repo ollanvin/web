@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="doc-title">최종 사용자 라이선스 계약 — CardSpend</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --green: #059669;
+    --green-light: #ecfdf5;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --orange: #d97706;
+    --orange-light: #fffbeb;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Nav */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .nav a {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav a:hover { background: var(--accent-light); color: var(--accent); }
+  .nav a.active { background: var(--accent); color: #fff; }
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner { max-width: 720px; margin: 0 auto; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+  .lang-tabs { display: flex; gap: 0; }
+  .lang-tab {
+    padding: 10px 20px; font-size: 14px; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; border-bottom: 2px solid transparent;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .lang-tab:hover { color: var(--text-primary); }
+  .lang-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  /* Main */
+  .main { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px 28px; margin-bottom: 40px;
+  }
+  .toc-title {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 12px;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li { counter-increment: toc; margin-bottom: 6px; }
+  .toc li a {
+    font-size: 15px; color: var(--text-primary); text-decoration: none;
+    display: flex; align-items: baseline; gap: 8px; transition: color 0.15s;
+  }
+  .toc li a::before { content: counter(toc) "."; font-weight: 600; color: var(--accent); min-width: 20px; }
+  .toc li a:hover { color: var(--accent); }
+  .section { margin-bottom: 36px; }
+  .section-number { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+  .section h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px; }
+  .section h3 { font-size: 16px; font-weight: 600; margin: 16px 0 8px; }
+  .section p { font-size: 15px; color: var(--text-secondary); margin-bottom: 12px; }
+  .section ul { margin: 8px 0 16px 20px; }
+  .section ul li { font-size: 15px; color: var(--text-secondary); margin-bottom: 6px; }
+  .data-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .data-tag {
+    display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  }
+  .data-tag.collect { background: var(--accent-light); color: var(--accent); }
+  .data-tag.no-collect { background: var(--red-light); color: var(--red); }
+  .data-tag.safe { background: var(--green-light); color: var(--green); }
+  .data-tag.warn { background: var(--orange-light); color: var(--orange); }
+  .highlight-box {
+    background: var(--green-light); border-left: 3px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px; margin: 12px 0; font-size: 14px; color: #065f46;
+  }
+  .highlight-box.warn { background: var(--red-light); border-left-color: var(--red); color: #991b1b; }
+  .highlight-box.info { background: var(--accent-light); border-left-color: var(--accent); color: #1e40af; }
+  .highlight-box.orange { background: var(--orange-light); border-left-color: var(--orange); color: #92400e; }
+  .divider { height: 1px; background: var(--border); margin: 36px 0; }
+  .footer {
+    text-align: center; padding: 24px; font-size: 13px; color: var(--text-secondary);
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .lang-content { display: none; }
+  .lang-content.active { display: block; }
+  .step-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin: 12px 0;
+  }
+  .step-num {
+    display: inline-block; width: 28px; height: 28px; line-height: 28px;
+    text-align: center; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 13px; font-weight: 700; margin-right: 10px;
+  }
+  .sdk-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px; margin: 10px 0;
+  }
+  .sdk-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .sdk-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+  @media (max-width: 640px) {
+    .nav { padding: 10px 12px; }
+    .nav a { font-size: 11px; padding: 4px 6px; }
+    .header { padding: 24px 16px 0; }
+    .header h1 { font-size: 22px; }
+    .main { padding: 24px 16px 60px; }
+    .lang-tab { padding: 10px 14px; font-size: 13px; }
+    .toc { padding: 20px; }
+    .section h2 { font-size: 18px; }
+    .data-tag { padding: 5px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">CardSpend Legal</span>
+    <a href="privacy.html"><span class="nav-ko">개인정보</span><span class="nav-en" style="display:none">Privacy</span><span class="nav-zh" style="display:none">隐私政策</span><span class="nav-ja" style="display:none">プライバシー</span></a><a href="terms.html"><span class="nav-ko">이용약관</span><span class="nav-en" style="display:none">Terms</span><span class="nav-zh" style="display:none">使用条款</span><span class="nav-ja" style="display:none">利用規約</span></a><a href="refund.html"><span class="nav-ko">환불정책</span><span class="nav-en" style="display:none">Refund</span><span class="nav-zh" style="display:none">退款</span><span class="nav-ja" style="display:none">返金</span></a><a href="account-deletion.html"><span class="nav-ko">계정삭제</span><span class="nav-en" style="display:none">Deletion</span><span class="nav-zh" style="display:none">删除账户</span><span class="nav-ja" style="display:none">アカウント削除</span></a><a href="cookies.html"><span class="nav-ko">쿠키</span><span class="nav-en" style="display:none">Cookies</span><span class="nav-zh" style="display:none">Cookie</span><span class="nav-ja" style="display:none">Cookie</span></a><a href="eula.html" class="active"><span class="nav-ko">EULA</span><span class="nav-en" style="display:none">EULA</span><span class="nav-zh" style="display:none">EULA</span><span class="nav-ja" style="display:none">EULA</span></a><a href="data-safety.html"><span class="nav-ko">데이터안전</span><span class="nav-en" style="display:none">Data Safety</span><span class="nav-zh" style="display:none">数据安全</span><span class="nav-ja" style="display:none">データ安全</span></a><a href="ai-disclosure.html"><span class="nav-ko">AI공개</span><span class="nav-en" style="display:none">AI</span><span class="nav-zh" style="display:none">AI披露</span><span class="nav-ja" style="display:none">AI開示</span></a><a href="third-party-sdks.html"><span class="nav-ko">SDK</span><span class="nav-en" style="display:none">SDK</span><span class="nav-zh" style="display:none">SDK</span><span class="nav-ja" style="display:none">SDK</span></a><a href="subscription.html"><span class="nav-ko">구독</span><span class="nav-en" style="display:none">Subscribe</span><span class="nav-zh" style="display:none">订阅</span><span class="nav-ja" style="display:none">サブスク</span></a><a href="support.html"><span class="nav-ko">지원</span><span class="nav-en" style="display:none">Support</span><span class="nav-zh" style="display:none">支持</span><span class="nav-ja" style="display:none">サポート</span></a><a href="legal.html"><span class="nav-ko">법적고지</span><span class="nav-en" style="display:none">Legal</span><span class="nav-zh" style="display:none">法律</span><span class="nav-ja" style="display:none">法的事項</span></a><a href="children.html"><span class="nav-ko">아동보호</span><span class="nav-en" style="display:none">Children</span><span class="nav-zh" style="display:none">儿童</span><span class="nav-ja" style="display:none">児童</span></a>
+  </div>
+</nav>
+
+<div class="header">
+  <div class="header-inner">
+    <h1 id="page-title">최종 사용자 라이선스 계약</h1>
+    <p class="subtitle" id="page-subtitle">시행일: 2026년 4월 3일 · CardSpend by OllanVin</p>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="switchLang('ko')">한국어</button>
+      <button class="lang-tab" onclick="switchLang('en')">English</button>
+      <button class="lang-tab" onclick="switchLang('zh')">中文</button>
+      <button class="lang-tab" onclick="switchLang('ja')">日本語</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="lang-content active" id="lang-ko">
+    <div class="toc">
+      <div class="toc-title">목차</div>
+      <ol>
+        <li><a href="#ko-1">라이선스 부여</a></li>
+        <li><a href="#ko-2">라이선스 범위</a></li>
+        <li><a href="#ko-3">제한 사항</a></li>
+        <li><a href="#ko-4">지적 재산권</a></li>
+        <li><a href="#ko-5">종료</a></li>
+        <li><a href="#ko-6">보증 부인</a></li>
+        <li><a href="#ko-7">책임 제한</a></li>
+        <li><a href="#ko-8">문의</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ko-1">
+      <div class="section-number">01</div>
+      <h2>라이선스 부여</h2>
+      <p>OllanVin은 사용자에게 CardSpend 애플리케이션을 개인적, 비상업적 용도로 사용할 수 있는 제한적이고 비독점적이며 양도 불가능한 라이선스를 부여합니다.</p>
+      <p>본 라이선스는 사용자 개인 기기에서의 사용에 한정됩니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-2">
+      <div class="section-number">02</div>
+      <h2>라이선스 범위</h2>
+      <ul>
+        <li>애플리케이션을 개인 기기에 설치 및 사용</li>
+        <li>앱 스토어 약관에 따른 백업 사본 생성</li>
+        <li>공식 업데이트 수신 및 설치</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-3">
+      <div class="section-number">03</div>
+      <h2>제한 사항</h2>
+      <p>사용자는 다음을 할 수 없습니다:</p>
+      <ul>
+        <li>애플리케이션을 복사, 수정, 배포, 판매, 대여</li>
+        <li>역공학, 디컴파일, 소스 코드 추출 시도</li>
+        <li>라이선스를 제3자에게 양도 또는 서브라이선스</li>
+        <li>애플리케이션의 보안 기능을 우회 또는 비활성화</li>
+        <li>저작권 표시 또는 상표를 제거</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-4">
+      <div class="section-number">04</div>
+      <h2>지적 재산권</h2>
+      <p>CardSpend 애플리케이션의 모든 권리, 소유권, 이익은 OllanVin에 귀속됩니다. 본 라이선스는 소유권 이전이 아닙니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-5">
+      <div class="section-number">05</div>
+      <h2>종료</h2>
+      <p>본 라이선스는 다음 경우 자동으로 종료됩니다:</p>
+      <ul>
+        <li>사용자가 본 계약의 조건을 위반한 경우</li>
+        <li>사용자가 애플리케이션을 삭제한 경우</li>
+        <li>OllanVin이 서비스를 영구 중단한 경우</li>
+      </ul>
+      <p>종료 시 사용자는 애플리케이션의 모든 사본을 삭제해야 합니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-6">
+      <div class="section-number">06</div>
+      <h2>보증 부인</h2>
+      <p>애플리케이션은 "있는 그대로" 제공됩니다. OllanVin은 상품성, 특정 목적 적합성, 비침해에 대한 묵시적 보증을 포함한 어떠한 보증도 하지 않습니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-7">
+      <div class="section-number">07</div>
+      <h2>책임 제한</h2>
+      <p>관련 법률이 허용하는 최대 범위 내에서, OllanVin은 본 애플리케이션 사용으로 인한 간접적, 부수적, 특별, 결과적 손해에 대해 책임을 지지 않습니다.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ko-8">
+      <div class="section-number">08</div>
+      <h2>문의</h2>
+      <p>EULA 관련 문의: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-en">
+    <div class="toc">
+      <div class="toc-title">Table of Contents</div>
+      <ol>
+        <li><a href="#en-1">License Grant</a></li>
+        <li><a href="#en-2">License Scope</a></li>
+        <li><a href="#en-3">Restrictions</a></li>
+        <li><a href="#en-4">Intellectual Property</a></li>
+        <li><a href="#en-5">Termination</a></li>
+        <li><a href="#en-6">Warranty Disclaimer</a></li>
+        <li><a href="#en-7">Limitation of Liability</a></li>
+        <li><a href="#en-8">Contact</a></li>
+      </ol>
+    </div>
+    <div class="section" id="en-1">
+      <div class="section-number">01</div>
+      <h2>License Grant</h2>
+      <p>OllanVin grants you a limited, non-exclusive, non-transferable license to use the CardSpend application for personal, non-commercial purposes.</p>
+      <p>This license is limited to use on your personal devices.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-2">
+      <div class="section-number">02</div>
+      <h2>License Scope</h2>
+      <ul>
+        <li>Install and use the application on personal devices</li>
+        <li>Create backup copies as permitted by app store terms</li>
+        <li>Receive and install official updates</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-3">
+      <div class="section-number">03</div>
+      <h2>Restrictions</h2>
+      <p>You may not:</p>
+      <ul>
+        <li>Copy, modify, distribute, sell, or rent the application</li>
+        <li>Reverse engineer, decompile, or extract source code</li>
+        <li>Transfer or sublicense the license to third parties</li>
+        <li>Circumvent or disable security features</li>
+        <li>Remove copyright notices or trademarks</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-4">
+      <div class="section-number">04</div>
+      <h2>Intellectual Property</h2>
+      <p>All rights, title, and interest in the CardSpend application belong to OllanVin. This license is not a transfer of ownership.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-5">
+      <div class="section-number">05</div>
+      <h2>Termination</h2>
+      <p>This license terminates automatically if:</p>
+      <ul>
+        <li>You violate any terms of this agreement</li>
+        <li>You delete the application</li>
+        <li>OllanVin permanently discontinues the service</li>
+      </ul>
+      <p>Upon termination, you must delete all copies of the application.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-6">
+      <div class="section-number">06</div>
+      <h2>Warranty Disclaimer</h2>
+      <p>The application is provided "as is." OllanVin makes no warranties, including implied warranties of merchantability, fitness for a particular purpose, or non-infringement.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-7">
+      <div class="section-number">07</div>
+      <h2>Limitation of Liability</h2>
+      <p>To the maximum extent permitted by applicable law, OllanVin shall not be liable for any indirect, incidental, special, or consequential damages arising from use of this application.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="en-8">
+      <div class="section-number">08</div>
+      <h2>Contact</h2>
+      <p>EULA inquiries: <span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-zh">
+    <div class="toc">
+      <div class="toc-title">目录</div>
+      <ol>
+        <li><a href="#zh-1">许可授予</a></li>
+        <li><a href="#zh-2">许可范围</a></li>
+        <li><a href="#zh-3">限制条款</a></li>
+        <li><a href="#zh-4">知识产权</a></li>
+        <li><a href="#zh-5">终止</a></li>
+        <li><a href="#zh-6">保证免责</a></li>
+        <li><a href="#zh-7">责任限制</a></li>
+        <li><a href="#zh-8">联系方式</a></li>
+      </ol>
+    </div>
+    <div class="section" id="zh-1">
+      <div class="section-number">01</div>
+      <h2>许可授予</h2>
+      <p>OllanVin授予您有限的、非独占的、不可转让的许可，允许您将CardSpend应用程序用于个人、非商业用途。</p>
+      <p>本许可仅限于在您的个人设备上使用。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-2">
+      <div class="section-number">02</div>
+      <h2>许可范围</h2>
+      <ul>
+        <li>在个人设备上安装和使用应用程序</li>
+        <li>根据应用商店条款创建备份副本</li>
+        <li>接收和安装官方更新</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-3">
+      <div class="section-number">03</div>
+      <h2>限制条款</h2>
+      <p>您不得：</p>
+      <ul>
+        <li>复制、修改、分发、出售或出租应用程序</li>
+        <li>逆向工程、反编译或提取源代码</li>
+        <li>将许可转让或再许可给第三方</li>
+        <li>绕过或禁用安全功能</li>
+        <li>删除版权声明或商标</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-4">
+      <div class="section-number">04</div>
+      <h2>知识产权</h2>
+      <p>CardSpend应用程序的所有权利、所有权和利益归OllanVin所有。本许可不构成所有权转让。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-5">
+      <div class="section-number">05</div>
+      <h2>终止</h2>
+      <p>本许可在以下情况下自动终止：</p>
+      <ul>
+        <li>您违反本协议的任何条款</li>
+        <li>您删除应用程序</li>
+        <li>OllanVin永久停止服务</li>
+      </ul>
+      <p>终止后，您必须删除应用程序的所有副本。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-6">
+      <div class="section-number">06</div>
+      <h2>保证免责</h2>
+      <p>应用程序按"原样"提供。OllanVin不提供任何保证，包括对适销性、特定用途适用性或不侵权的默示保证。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-7">
+      <div class="section-number">07</div>
+      <h2>责任限制</h2>
+      <p>在适用法律允许的最大范围内，OllanVin不对因使用本应用程序而产生的任何间接、附带、特殊或后果性损害承担责任。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="zh-8">
+      <div class="section-number">08</div>
+      <h2>联系方式</h2>
+      <p>EULA相关咨询：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+  <div class="lang-content" id="lang-ja">
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+        <li><a href="#ja-1">ライセンスの付与</a></li>
+        <li><a href="#ja-2">ライセンス範囲</a></li>
+        <li><a href="#ja-3">制限事項</a></li>
+        <li><a href="#ja-4">知的財産権</a></li>
+        <li><a href="#ja-5">終了</a></li>
+        <li><a href="#ja-6">保証の否認</a></li>
+        <li><a href="#ja-7">責任の制限</a></li>
+        <li><a href="#ja-8">お問い合わせ</a></li>
+      </ol>
+    </div>
+    <div class="section" id="ja-1">
+      <div class="section-number">01</div>
+      <h2>ライセンスの付与</h2>
+      <p>OllanVinは、ユーザーに対してCardSpendアプリケーションを個人的、非商業的目的で使用するための制限的、非独占的、譲渡不可能なライセンスを付与します。</p>
+      <p>本ライセンスはユーザーの個人デバイスでの使用に限定されます。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-2">
+      <div class="section-number">02</div>
+      <h2>ライセンス範囲</h2>
+      <ul>
+        <li>個人デバイスへのアプリケーションのインストールおよび使用</li>
+        <li>アプリストアの利用規約に基づくバックアップコピーの作成</li>
+        <li>公式アップデートの受信およびインストール</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-3">
+      <div class="section-number">03</div>
+      <h2>制限事項</h2>
+      <p>ユーザーは以下を行うことはできません：</p>
+      <ul>
+        <li>アプリケーションの複製、修正、配布、販売、貸与</li>
+        <li>リバースエンジニアリング、逆コンパイル、ソースコードの抽出</li>
+        <li>第三者へのライセンスの譲渡またはサブライセンス</li>
+        <li>セキュリティ機能の迂回または無効化</li>
+        <li>著作権表示または商標の除去</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-4">
+      <div class="section-number">04</div>
+      <h2>知的財産権</h2>
+      <p>CardSpendアプリケーションのすべての権利、所有権、利益はOllanVinに帰属します。本ライセンスは所有権の移転ではありません。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-5">
+      <div class="section-number">05</div>
+      <h2>終了</h2>
+      <p>本ライセンスは以下の場合に自動的に終了します：</p>
+      <ul>
+        <li>ユーザーが本契約の条件に違反した場合</li>
+        <li>ユーザーがアプリケーションを削除した場合</li>
+        <li>OllanVinがサービスを永久に中断した場合</li>
+      </ul>
+      <p>終了時、ユーザーはアプリケーションのすべてのコピーを削除する必要があります。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-6">
+      <div class="section-number">06</div>
+      <h2>保証の否認</h2>
+      <p>アプリケーションは「現状のまま」提供されます。OllanVinは商品性、特定目的への適合性、非侵害に関する黙示的保証を含む、いかなる保証も行いません。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-7">
+      <div class="section-number">07</div>
+      <h2>責任の制限</h2>
+      <p>適用法が許容する最大限の範囲内で、OllanVinは本アプリケーションの使用に起因する間接的、付随的、特別、結果的損害について責任を負いません。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section" id="ja-8">
+      <div class="section-number">08</div>
+      <h2>お問い合わせ</h2>
+      <p>EULAに関するお問い合わせ：<span style="color:var(--accent);font-weight:600">founder@idolab.ai</span></p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2026 OllanVin &middot; CardSpend &middot; <a href="mailto:founder@idolab.ai">founder@idolab.ai</a>
+</div>
+
+<script>
+  var titles = { ko: '최종 사용자 라이선스 계약', en: 'End User License Agreement', zh: '最终用户许可协议', ja: 'エンドユーザーライセンス契約' };
+  var subtitles = { ko: '시행일: 2026년 4월 3일 · CardSpend by OllanVin', en: 'Effective: April 3, 2026 · CardSpend by OllanVin', zh: '生效日期：2026年4月3日 · CardSpend by OllanVin', ja: '施行日：2026年4月3日 · CardSpend by OllanVin' };
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-content').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.lang-tab').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('lang-' + lang).classList.add('active');
+    document.querySelector('[onclick="switchLang(\'' + lang + '\')"]').classList.add('active');
+    document.getElementById('page-title').textContent = titles[lang];
+    document.getElementById('page-subtitle').textContent = subtitles[lang];
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+    // Update nav labels
+    ['ko','en','zh','ja'].forEach(function(l) {
+      document.querySelectorAll('.nav-' + l).forEach(function(el) {
+        el.style.display = l === lang ? '' : 'none';
+      });
+    });
+  }
+</script>
+</body>
+</html>
