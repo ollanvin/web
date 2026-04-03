@@ -3,28 +3,678 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CardSpend 개인정보처리방침</title>
+<title>CardSpend — Privacy Policy</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --green: #059669;
+    --green-light: #ecfdf5;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+  .header .subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+
+  /* Language Tabs */
+  .lang-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: none;
+  }
+  .lang-tab {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lang-tab:hover {
+    color: var(--text-primary);
+  }
+  .lang-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* Main Content */
+  .main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 40px;
+  }
+  .toc-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+  }
+  .toc li {
+    counter-increment: toc;
+    margin-bottom: 6px;
+  }
+  .toc li a {
+    font-size: 15px;
+    color: var(--text-primary);
+    text-decoration: none;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    transition: color 0.15s;
+  }
+  .toc li a::before {
+    content: counter(toc) ".";
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 20px;
+  }
+  .toc li a:hover {
+    color: var(--accent);
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 36px;
+  }
+  .section-number {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+  }
+  .section p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+
+  /* Data List */
+  .data-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .data-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .data-tag.collect {
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+  .data-tag.no-collect {
+    background: var(--red-light);
+    color: var(--red);
+  }
+  .data-tag.safe {
+    background: var(--green-light);
+    color: var(--green);
+  }
+
+  /* Highlight Box */
+  .highlight-box {
+    background: var(--green-light);
+    border-left: 3px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: #065f46;
+  }
+  .highlight-box.warn {
+    background: var(--red-light);
+    border-left-color: var(--red);
+    color: #991b1b;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 36px 0;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  /* Language Content */
+  .lang-content { display: none; }
+  .lang-content.active { display: block; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .header { padding: 24px 16px 0; }
+    .header h1 { font-size: 22px; }
+    .main { padding: 24px 16px 60px; }
+    .lang-tab { padding: 10px 14px; font-size: 13px; }
+    .toc { padding: 20px; }
+    .section h2 { font-size: 18px; }
+    .data-list { gap: 6px; }
+    .data-tag { padding: 5px 12px; font-size: 12px; }
+  }
+</style>
 </head>
 <body>
-<h1>개인정보처리방침</h1>
-<p>시행일: 2026년 4월 3일</p>
 
-<h2>수집하지 않는 정보</h2>
-<p>CardSpend는 카드번호, 유효기간, CVV, 계좌 비밀번호를 수집하지 않습니다.</p>
+<div class="header">
+  <div class="header-inner">
+    <h1 id="page-title">개인정보처리방침</h1>
+    <p class="subtitle" id="page-subtitle">시행일: 2026년 4월 3일 · CardSpend by OllanVin</p>
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="switchLang('ko')">한국어</button>
+      <button class="lang-tab" onclick="switchLang('en')">English</button>
+      <button class="lang-tab" onclick="switchLang('zh')">中文</button>
+      <button class="lang-tab" onclick="switchLang('ja')">日本語</button>
+    </div>
+  </div>
+</div>
 
-<h2>온디바이스 분석</h2>
-<p>모든 카드 분석은 기기 내부에서만 이루어집니다. 분석 원문은 서버로 전송되지 않습니다.</p>
+<div class="main">
 
-<h2>백업 데이터</h2>
-<p>백업 시 카드 별명, 카드사, 끝 4자리, 사용 기록, 설정값만 암호화하여 저장합니다. 이 정보만으로는 결제가 불가능합니다.</p>
+  <!-- ============ 한국어 ============ -->
+  <div class="lang-content active" id="lang-ko">
+    <div class="toc">
+      <div class="toc-title">목차</div>
+      <ol>
+        <li><a href="#ko-1">수집하는 정보</a></li>
+        <li><a href="#ko-2">수집하지 않는 정보</a></li>
+        <li><a href="#ko-3">온디바이스 분석</a></li>
+        <li><a href="#ko-4">백업 및 보안</a></li>
+        <li><a href="#ko-5">카메라 권한</a></li>
+        <li><a href="#ko-6">데이터 삭제</a></li>
+        <li><a href="#ko-7">문의</a></li>
+      </ol>
+    </div>
 
-<h2>카메라 권한</h2>
-<p>카드 스캔 기능에만 사용되며 사진은 저장되지 않습니다.</p>
+    <div class="section" id="ko-1">
+      <div class="section-number">01</div>
+      <h2>수집하는 정보</h2>
+      <p>CardSpend는 서비스 제공에 필요한 최소한의 정보만 수집합니다.</p>
+      <div class="data-list">
+        <span class="data-tag collect">소셜 로그인 이메일</span>
+        <span class="data-tag collect">카드 별명</span>
+        <span class="data-tag collect">카드사</span>
+        <span class="data-tag collect">카드 끝 4자리</span>
+        <span class="data-tag collect">거래 금액</span>
+        <span class="data-tag collect">거래 시각</span>
+        <span class="data-tag collect">가맹점명</span>
+        <span class="data-tag collect">설정값</span>
+      </div>
+      <p>위 정보만으로는 결제를 수행할 수 없습니다. 카드 식별과 지출 분석 목적으로만 사용됩니다.</p>
+    </div>
 
-<h2>데이터 삭제</h2>
-<p>멤버십 탈퇴 시 서버의 모든 데이터를 즉시 영구 삭제합니다.</p>
+    <div class="divider"></div>
 
-<h2>문의</h2>
-<p>founder@idolab.ai</p>
+    <div class="section" id="ko-2">
+      <div class="section-number">02</div>
+      <h2>수집하지 않는 정보</h2>
+      <p>다음 정보는 어떤 경우에도 수집·저장·전송하지 않습니다.</p>
+      <div class="data-list">
+        <span class="data-tag no-collect">카드 전체 번호</span>
+        <span class="data-tag no-collect">유효기간</span>
+        <span class="data-tag no-collect">CVV / CVC</span>
+        <span class="data-tag no-collect">계좌 비밀번호</span>
+        <span class="data-tag no-collect">알림 원문</span>
+      </div>
+      <div class="highlight-box warn">카드번호, 유효기간, CVV 등 결제에 필요한 민감 정보는 앱 내부에서도 일절 저장하지 않습니다.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ko-3">
+      <div class="section-number">03</div>
+      <h2>온디바이스 분석</h2>
+      <p>모든 카드 거래 분석은 사용자의 기기 내부에서만 수행됩니다. 분석 과정에서 원문 데이터가 외부 서버로 전송되지 않습니다.</p>
+      <div class="highlight-box">알림 파싱, 실적 계산, 위험도 분석 등 모든 핵심 로직은 기기 내에서 실행됩니다.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ko-4">
+      <div class="section-number">04</div>
+      <h2>백업 및 보안</h2>
+      <p>사용자가 백업을 선택한 경우에만 데이터를 암호화하여 클라우드에 저장합니다.</p>
+      <div class="data-list">
+        <span class="data-tag safe">AES-256 암호화</span>
+        <span class="data-tag safe">사용자 선택적 백업</span>
+        <span class="data-tag safe">전송 중 TLS 보호</span>
+      </div>
+      <p>백업 데이터에는 카드 별명, 카드사, 끝 4자리, 거래 기록, 설정값만 포함됩니다. 이 정보만으로는 결제가 불가능합니다.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ko-5">
+      <div class="section-number">05</div>
+      <h2>카메라 권한</h2>
+      <p>카메라 권한은 카드 스캔 기능에만 사용됩니다. 스캔된 이미지는 기기에 저장되지 않으며, 카드 정보 인식 후 즉시 메모리에서 폐기됩니다.</p>
+      <div class="highlight-box">카메라로 촬영된 사진은 저장·전송·보관되지 않습니다.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ko-6">
+      <div class="section-number">06</div>
+      <h2>데이터 삭제</h2>
+      <p>멤버십 탈퇴 시 서버에 저장된 모든 데이터를 즉시 영구 삭제합니다. 삭제 후 데이터 복구는 불가능합니다.</p>
+      <div class="highlight-box">탈퇴 즉시 계정 정보, 백업 데이터, 설정값 등 모든 데이터가 영구적으로 삭제됩니다.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ko-7">
+      <div class="section-number">07</div>
+      <h2>문의</h2>
+      <p>개인정보 관련 문의는 아래로 연락해 주시기 바랍니다.</p>
+      <p style="color: var(--accent); font-weight: 600;">founder@idolab.ai</p>
+    </div>
+  </div>
+
+  <!-- ============ English ============ -->
+  <div class="lang-content" id="lang-en">
+    <div class="toc">
+      <div class="toc-title">Table of Contents</div>
+      <ol>
+        <li><a href="#en-1">Information We Collect</a></li>
+        <li><a href="#en-2">Information We Do Not Collect</a></li>
+        <li><a href="#en-3">On-Device Analysis</a></li>
+        <li><a href="#en-4">Backup & Security</a></li>
+        <li><a href="#en-5">Camera Permission</a></li>
+        <li><a href="#en-6">Data Deletion</a></li>
+        <li><a href="#en-7">Contact</a></li>
+      </ol>
+    </div>
+
+    <div class="section" id="en-1">
+      <div class="section-number">01</div>
+      <h2>Information We Collect</h2>
+      <p>CardSpend collects only the minimum information necessary to provide its services.</p>
+      <div class="data-list">
+        <span class="data-tag collect">Social login email</span>
+        <span class="data-tag collect">Card nickname</span>
+        <span class="data-tag collect">Card issuer</span>
+        <span class="data-tag collect">Last 4 digits</span>
+        <span class="data-tag collect">Transaction amount</span>
+        <span class="data-tag collect">Transaction time</span>
+        <span class="data-tag collect">Merchant name</span>
+        <span class="data-tag collect">Settings</span>
+      </div>
+      <p>This information alone cannot be used to make payments. It is used solely for card identification and spending analysis.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="en-2">
+      <div class="section-number">02</div>
+      <h2>Information We Do Not Collect</h2>
+      <p>The following information is never collected, stored, or transmitted under any circumstances.</p>
+      <div class="data-list">
+        <span class="data-tag no-collect">Full card number</span>
+        <span class="data-tag no-collect">Expiration date</span>
+        <span class="data-tag no-collect">CVV / CVC</span>
+        <span class="data-tag no-collect">Account password</span>
+        <span class="data-tag no-collect">Raw notification text</span>
+      </div>
+      <div class="highlight-box warn">Sensitive payment information such as card numbers, expiration dates, and CVV codes are never stored, even locally on the device.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="en-3">
+      <div class="section-number">03</div>
+      <h2>On-Device Analysis</h2>
+      <p>All card transaction analysis is performed entirely on your device. Raw data is never transmitted to external servers during the analysis process.</p>
+      <div class="highlight-box">Notification parsing, spending calculations, and risk analysis all run locally on your device.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="en-4">
+      <div class="section-number">04</div>
+      <h2>Backup & Security</h2>
+      <p>Data is stored in the cloud only when you choose to enable backup, and only in encrypted form.</p>
+      <div class="data-list">
+        <span class="data-tag safe">AES-256 encryption</span>
+        <span class="data-tag safe">User-optional backup</span>
+        <span class="data-tag safe">TLS in transit</span>
+      </div>
+      <p>Backup data includes only card nicknames, issuers, last 4 digits, transaction records, and settings. This information alone cannot be used for payments.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="en-5">
+      <div class="section-number">05</div>
+      <h2>Camera Permission</h2>
+      <p>Camera access is used exclusively for card scanning. Scanned images are not saved to the device and are immediately discarded from memory after card information is recognized.</p>
+      <div class="highlight-box">Photos captured by the camera are never saved, transmitted, or retained.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="en-6">
+      <div class="section-number">06</div>
+      <h2>Data Deletion</h2>
+      <p>All server-stored data is permanently deleted immediately upon account deletion. Data recovery is not possible after deletion.</p>
+      <div class="highlight-box">Upon account deletion, all account information, backup data, and settings are permanently and irreversibly removed.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="en-7">
+      <div class="section-number">07</div>
+      <h2>Contact</h2>
+      <p>For privacy-related inquiries, please contact us at:</p>
+      <p style="color: var(--accent); font-weight: 600;">founder@idolab.ai</p>
+    </div>
+  </div>
+
+  <!-- ============ 中文 ============ -->
+  <div class="lang-content" id="lang-zh">
+    <div class="toc">
+      <div class="toc-title">目录</div>
+      <ol>
+        <li><a href="#zh-1">我们收集的信息</a></li>
+        <li><a href="#zh-2">我们不收集的信息</a></li>
+        <li><a href="#zh-3">设备端分析</a></li>
+        <li><a href="#zh-4">备份与安全</a></li>
+        <li><a href="#zh-5">相机权限</a></li>
+        <li><a href="#zh-6">数据删除</a></li>
+        <li><a href="#zh-7">联系方式</a></li>
+      </ol>
+    </div>
+
+    <div class="section" id="zh-1">
+      <div class="section-number">01</div>
+      <h2>我们收集的信息</h2>
+      <p>CardSpend 仅收集提供服务所需的最少信息。</p>
+      <div class="data-list">
+        <span class="data-tag collect">社交登录邮箱</span>
+        <span class="data-tag collect">卡片昵称</span>
+        <span class="data-tag collect">发卡机构</span>
+        <span class="data-tag collect">卡号末4位</span>
+        <span class="data-tag collect">交易金额</span>
+        <span class="data-tag collect">交易时间</span>
+        <span class="data-tag collect">商户名称</span>
+        <span class="data-tag collect">设置信息</span>
+      </div>
+      <p>上述信息不能用于进行支付。仅用于卡片识别和消费分析。</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="zh-2">
+      <div class="section-number">02</div>
+      <h2>我们不收集的信息</h2>
+      <p>以下信息在任何情况下均不会被收集、存储或传输。</p>
+      <div class="data-list">
+        <span class="data-tag no-collect">完整卡号</span>
+        <span class="data-tag no-collect">有效期</span>
+        <span class="data-tag no-collect">CVV / CVC</span>
+        <span class="data-tag no-collect">账户密码</span>
+        <span class="data-tag no-collect">通知原文</span>
+      </div>
+      <div class="highlight-box warn">卡号、有效期、CVV等支付敏感信息不会存储，即使在设备本地也不会保留。</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="zh-3">
+      <div class="section-number">03</div>
+      <h2>设备端分析</h2>
+      <p>所有卡片交易分析均在用户设备内部完成。分析过程中原始数据不会传输到外部服务器。</p>
+      <div class="highlight-box">通知解析、消费计算、风险分析等所有核心逻辑均在设备端本地运行。</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="zh-4">
+      <div class="section-number">04</div>
+      <h2>备份与安全</h2>
+      <p>仅当用户选择启用备份时，数据才会以加密形式存储到云端。</p>
+      <div class="data-list">
+        <span class="data-tag safe">AES-256 加密</span>
+        <span class="data-tag safe">用户可选备份</span>
+        <span class="data-tag safe">传输中 TLS 保护</span>
+      </div>
+      <p>备份数据仅包含卡片昵称、发卡机构、末4位、交易记录和设置信息。这些信息不足以用于支付。</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="zh-5">
+      <div class="section-number">05</div>
+      <h2>相机权限</h2>
+      <p>相机权限仅用于卡片扫描功能。扫描的图像不会保存到设备，在识别卡片信息后立即从内存中清除。</p>
+      <div class="highlight-box">相机拍摄的照片不会被保存、传输或保留。</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="zh-6">
+      <div class="section-number">06</div>
+      <h2>数据删除</h2>
+      <p>注销账户时，服务器上存储的所有数据将立即被永久删除。删除后数据无法恢复。</p>
+      <div class="highlight-box">注销后，账户信息、备份数据、设置信息等所有数据将被永久且不可逆地删除。</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="zh-7">
+      <div class="section-number">07</div>
+      <h2>联系方式</h2>
+      <p>如有隐私相关问题，请通过以下方式联系我们：</p>
+      <p style="color: var(--accent); font-weight: 600;">founder@idolab.ai</p>
+    </div>
+  </div>
+
+  <!-- ============ 日本語 ============ -->
+  <div class="lang-content" id="lang-ja">
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+        <li><a href="#ja-1">収集する情報</a></li>
+        <li><a href="#ja-2">収集しない情報</a></li>
+        <li><a href="#ja-3">オンデバイス分析</a></li>
+        <li><a href="#ja-4">バックアップとセキュリティ</a></li>
+        <li><a href="#ja-5">カメラ権限</a></li>
+        <li><a href="#ja-6">データ削除</a></li>
+        <li><a href="#ja-7">お問い合わせ</a></li>
+      </ol>
+    </div>
+
+    <div class="section" id="ja-1">
+      <div class="section-number">01</div>
+      <h2>収集する情報</h2>
+      <p>CardSpendはサービスの提供に必要な最小限の情報のみを収集します。</p>
+      <div class="data-list">
+        <span class="data-tag collect">ソーシャルログインメール</span>
+        <span class="data-tag collect">カードニックネーム</span>
+        <span class="data-tag collect">カード会社</span>
+        <span class="data-tag collect">カード下4桁</span>
+        <span class="data-tag collect">取引金額</span>
+        <span class="data-tag collect">取引時刻</span>
+        <span class="data-tag collect">加盟店名</span>
+        <span class="data-tag collect">設定値</span>
+      </div>
+      <p>上記の情報だけでは決済を行うことはできません。カードの識別と支出分析の目的にのみ使用されます。</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ja-2">
+      <div class="section-number">02</div>
+      <h2>収集しない情報</h2>
+      <p>以下の情報は、いかなる場合も収集・保存・送信しません。</p>
+      <div class="data-list">
+        <span class="data-tag no-collect">カード番号全体</span>
+        <span class="data-tag no-collect">有効期限</span>
+        <span class="data-tag no-collect">CVV / CVC</span>
+        <span class="data-tag no-collect">口座パスワード</span>
+        <span class="data-tag no-collect">通知原文</span>
+      </div>
+      <div class="highlight-box warn">カード番号、有効期限、CVVなどの決済に必要な機密情報は、デバイス内部でも一切保存しません。</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ja-3">
+      <div class="section-number">03</div>
+      <h2>オンデバイス分析</h2>
+      <p>すべてのカード取引分析は、ユーザーのデバイス内部でのみ実行されます。分析過程で原文データが外部サーバーに送信されることはありません。</p>
+      <div class="highlight-box">通知の解析、実績計算、リスク分析などすべてのコアロジックはデバイス上でローカルに実行されます。</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ja-4">
+      <div class="section-number">04</div>
+      <h2>バックアップとセキュリティ</h2>
+      <p>ユーザーがバックアップを選択した場合にのみ、データを暗号化してクラウドに保存します。</p>
+      <div class="data-list">
+        <span class="data-tag safe">AES-256 暗号化</span>
+        <span class="data-tag safe">ユーザー選択式バックアップ</span>
+        <span class="data-tag safe">転送中 TLS 保護</span>
+      </div>
+      <p>バックアップデータにはカードニックネーム、カード会社、下4桁、取引記録、設定値のみが含まれます。この情報だけでは決済はできません。</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ja-5">
+      <div class="section-number">05</div>
+      <h2>カメラ権限</h2>
+      <p>カメラ権限はカードスキャン機能にのみ使用されます。スキャンされた画像はデバイスに保存されず、カード情報認識後すぐにメモリから破棄されます。</p>
+      <div class="highlight-box">カメラで撮影された写真は保存・送信・保管されません。</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ja-6">
+      <div class="section-number">06</div>
+      <h2>データ削除</h2>
+      <p>退会時、サーバーに保存されたすべてのデータを即時永久削除します。削除後のデータ復旧はできません。</p>
+      <div class="highlight-box">退会と同時に、アカウント情報、バックアップデータ、設定値などすべてのデータが永久的かつ不可逆的に削除されます。</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ja-7">
+      <div class="section-number">07</div>
+      <h2>お問い合わせ</h2>
+      <p>プライバシーに関するお問い合わせは、以下までご連絡ください。</p>
+      <p style="color: var(--accent); font-weight: 600;">founder@idolab.ai</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  &copy; 2026 OllanVin · CardSpend · <a href="mailto:founder@idolab.ai">founder@idolab.ai</a>
+</div>
+
+<script>
+  const titles = {
+    ko: '개인정보처리방침',
+    en: 'Privacy Policy',
+    zh: '隐私政策',
+    ja: 'プライバシーポリシー'
+  };
+  const subtitles = {
+    ko: '시행일: 2026년 4월 3일 · CardSpend by OllanVin',
+    en: 'Effective: April 3, 2026 · CardSpend by OllanVin',
+    zh: '生效日期：2026年4月3日 · CardSpend by OllanVin',
+    ja: '施行日：2026年4月3日 · CardSpend by OllanVin'
+  };
+
+  function switchLang(lang) {
+    document.querySelectorAll('.lang-content').forEach(function(el) {
+      el.classList.remove('active');
+    });
+    document.querySelectorAll('.lang-tab').forEach(function(el) {
+      el.classList.remove('active');
+    });
+    document.getElementById('lang-' + lang).classList.add('active');
+    document.querySelector('[onclick="switchLang(\'' + lang + '\')"]').classList.add('active');
+    document.getElementById('page-title').textContent = titles[lang];
+    document.getElementById('page-subtitle').textContent = subtitles[lang];
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+  }
+</script>
 </body>
 </html>
